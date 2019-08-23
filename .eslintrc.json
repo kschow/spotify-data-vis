@@ -51,6 +51,16 @@
         "arrow-body-style": "off",
         "sort-imports": "off",
         "quote-props": "off",
-        "one-var": [2, "never"]
+        "one-var": [2, "never"],
+        "dot-location": [2, "property"],
+        "quotes": [2, "single", {"allowTemplateLiterals":  true}],
+        "object-curly-spacing": [2, "always"],
+        "max-len": [2, {"code": 120}],
+        "no-magic-numbers": "off",
+        "capitalized-comments": "off",
+        "array-element-newline": [2, {"minItems": 3} ],
+        "no-ternary": "off",
+        "operator-linebreak": [2, "after"],
+        "sort-keys": "off"
     }
 }
