@@ -13,7 +13,11 @@ const SearchResult = ({ name, imageUrls, popularity }) => {
             </div>
             <div className="data">
                 <div>{name}</div>
-                <div>Popularity: {popularity}</div>
+                {
+                    popularity ?
+                        <div>Popularity: {popularity}</div> :
+                        null
+                }
             </div>
         </div>
     );

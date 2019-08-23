@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './SearchArea.scss';
 import SearchControls from './SearchControls';
 import SearchResults from './SearchResults';
 import SearchService from './SearchService';
@@ -7,16 +8,25 @@ const SearchArea = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
-    const search = (searchTerm) => {
+    const searchForX = (searchFunction, searchTerm) => {
+        return searchFunction(searchTerm)
+            .then((response) => setSearchResults(response))
+            .catch(() => setErrorMessage('Search Spotify failed.'));
+    };
+
+    const search = (searchTerm, searchType) => {
         if (searchTerm === '') {
             setErrorMessage('Please specify your search.');
             return;
         }
 
         setErrorMessage('');
-        SearchService.searchArtist(searchTerm)
-            .then((response) => setSearchResults(response))
-            .catch(() => setErrorMessage('Search Spotify failed.'));
+
+        if (searchType === 'artist') {
+            searchForX(SearchService.searchArtist, searchTerm);
+        } else if (searchType === 'playlist') {
+            searchForX(SearchService.searchPlaylist, searchTerm);
+        }
     };
 
     return (

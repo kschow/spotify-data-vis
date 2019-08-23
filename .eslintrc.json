@@ -61,6 +61,7 @@
         "array-element-newline": [2, {"minItems": 3} ],
         "no-ternary": "off",
         "operator-linebreak": [2, "after"],
-        "sort-keys": "off"
+        "sort-keys": "off",
+        "max-statements": "off"
     }
 }

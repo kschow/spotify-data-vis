@@ -10,9 +10,24 @@ it('searching without specifying search terms leads to an error message', () => 
 
     const searchBox = getByPlaceholderText('Search by artist');
     expect(searchBox.text).toBeUndefined();
+
+    const searchTypeDropdown = getByText('Artist');
+    expect(searchTypeDropdown).toBeTruthy();
+
     fireEvent.click(getByText('Search'));
 
     expect(getByText('Please specify your search.')).toBeTruthy();
+});
+
+it('switching to playlist search changes the placeholder text', () => {
+    const { getByPlaceholderText, queryByPlaceholderText, getByDisplayValue } = render(<SearchArea />);
+
+    const searchBox = getByPlaceholderText('Search by artist');
+    expect(searchBox.text).toBeUndefined();
+
+    fireEvent.change(getByDisplayValue('Artist'), { target: { value: 'playlist' } });
+
+    expect(queryByPlaceholderText('Search by playlist')).toBeTruthy();
 });
 
 it('searching for an artist that returns results shows results', async () => {
@@ -36,11 +51,49 @@ it('searching for an artist that returns results shows results', async () => {
     const { getByPlaceholderText, getByText, queryByText, findByText } = render(<SearchArea />);
 
     const searchBox = getByPlaceholderText('Search by artist');
-    expect(searchBox.text).toBeUndefined();
+    const submitButton = getByText('Search');
+
     fireEvent.change(searchBox, { target: { value: 'lucy' } });
-    fireEvent.click(getByText('Search'));
+    fireEvent.click(submitButton);
 
     expect(queryByText('Please specify your search.')).toBeNull();
     await expect(findByText('Lucy Dacus')).resolves.toBeTruthy();
     await expect(findByText('Lucy Hale')).resolves.toBeTruthy();
+});
+
+it('searching for a playlist that returns results shows results', async () => {
+    const results = [
+        {
+            'spotifyId': '07D1Bjaof0NFlU32KXiqUP',
+            'genres': [],
+            'name': 'Official ACL 2019 Playlist',
+            'imageUrls': []
+        }, {
+            'spotifyId': '4gWAItIMhYCdD82T8tvv3T',
+            'genres': [],
+            'name': 'ACL 2019',
+            'imageUrls': []
+        }
+    ];
+    SearchService.searchPlaylist.mockResolvedValue(results);
+
+    const {
+        getByPlaceholderText,
+        getByText,
+        queryByText,
+        findByText,
+        getByDisplayValue
+    } = render(<SearchArea />);
+
+    const searchBox = getByPlaceholderText('Search by artist');
+    const dropdown = getByDisplayValue('Artist');
+    const submitButton = getByText('Search');
+
+    fireEvent.change(dropdown, { target: { value: 'playlist' } });
+    fireEvent.change(searchBox, { target: { value: 'ACL 2019' } });
+    fireEvent.click(submitButton);
+
+    expect(queryByText('Please specify your search.')).toBeNull();
+    await expect(findByText('Official ACL 2019 Playlist')).resolves.toBeTruthy();
+    await expect(findByText('ACL 2019')).resolves.toBeTruthy();
 });
