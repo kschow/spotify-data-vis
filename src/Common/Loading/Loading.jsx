@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Loading.scss';
 
 const Loading = () => {
+    const [displayMessage, setDisplayMessage] = useState(false);
+
+    useEffect(() => {
+        let timer = null;
+        timer = setTimeout(() => setDisplayMessage(true), 300);
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
-        <div
-            className="Loading"
-            data-testid="Loading"
-        />
+        displayMessage ?
+            <div
+                className="Loading"
+                data-testid="Loading"
+            /> :
+            null
     );
 };
 

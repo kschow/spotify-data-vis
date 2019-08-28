@@ -100,7 +100,7 @@ it('searching for a playlist that returns results shows results', async () => {
 
 it('shows loading while waiting for results', async () => {
     // eslint-disable-next-line no-empty-function
-    SearchService.searchPlaylist.mockReturnValue(new Promise(() => {}));
+    SearchService.searchArtist.mockReturnValue(new Promise(() => {}));
 
     const {
         getByPlaceholderText,
