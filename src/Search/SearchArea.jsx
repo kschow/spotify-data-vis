@@ -11,7 +11,7 @@ const SearchArea = () => {
     const searchForX = (searchFunction, searchTerm) => {
         return searchFunction(searchTerm)
             .then((response) => setSearchResults(response))
-            .catch(() => setErrorMessage('Search Spotify failed.'));
+            .catch(() => setErrorMessage('Spotify search failed.'));
     };
 
     const search = (searchTerm, searchType) => {
@@ -35,7 +35,7 @@ const SearchArea = () => {
             {
                 errorMessage === '' ?
                     null :
-                    <div>{errorMessage}</div>
+                    <div className="error"><strong>{errorMessage}</strong></div>
             }
             <SearchResults results={searchResults}/>
         </div>);

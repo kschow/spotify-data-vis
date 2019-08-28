@@ -8,12 +8,17 @@
   input {
     border-radius: 2px;
     border-width: 0;
+    text-indent: .5rem;
   }
 
   button {
     border-radius: 2px;
     border-width: 0;
   }
+}
+
+.error {
+  color: #c44;
 }
 
 .SearchResults {
