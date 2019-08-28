@@ -1,11 +1,12 @@
 ## taken and adapted from
 # https://github.com/thundermiracle/gatsby-simple-blog/blob/master/deploy/netlify/.circleci/config.yml
 
-version: 2
+version: 2.1
 
 executors:
-  docker:
-    - image: circleci/node:11.10.1-stretch
+  node:
+    docker:
+      - image: circleci/node:11.10.1-stretch
 
 aliases:
   restore_cache: &restore_cache
@@ -28,7 +29,7 @@ aliases:
 
 jobs:
   test:
-    executor: docker
+    executor: node
     steps:
       - checkout
       - <<: *restore_cache
@@ -38,7 +39,7 @@ jobs:
           name: Test
           command: yarn test
   build:
-    executor: docker
+    executor: node
     steps:
       - checkout
       - <<: *restore_cache
@@ -51,7 +52,7 @@ jobs:
           paths:
             - public
   deploy:
-    executor: docker
+    executor: node
     steps:
       - checkout
       - attach_workspace:
