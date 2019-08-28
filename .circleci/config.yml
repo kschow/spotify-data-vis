@@ -50,7 +50,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths:
-            - public
+            - build
   deploy:
     executor: node
     steps:
