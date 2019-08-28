@@ -1,0 +1,44 @@
+/**
+ * HTML5 / CSS3 Circle with Partial Border
+ * Adapted from:
+ * http://stackoverflow.com/q/13059190/1397351
+ */
+
+$border-color: #55a0a7;
+$default-color: #efefef;
+
+.Loading {
+  position: relative;
+  width: 12em;
+  height: 12em;
+  border-radius: 50%;
+  border: 20px solid $default-color;
+  margin: 2em auto;
+
+  animation: Loading-animation 2s .25s infinite ease-in-out alternate;
+  animation-fill-mode: both;
+}
+
+@keyframes Loading-animation {
+  0% {
+    border-color: $default-color;
+  }
+  25% {
+    border-top-color: $border-color;
+  }
+  50% {
+    border-top-color: $border-color;
+    border-right-color: $border-color;
+  }
+  75% {
+    border-top-color: $border-color;
+    border-right-color: $border-color;
+    border-bottom-color: $border-color;
+  }
+  100% {
+    border-color: $border-color;
+  }
+
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

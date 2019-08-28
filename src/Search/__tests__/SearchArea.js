@@ -97,3 +97,24 @@ it('searching for a playlist that returns results shows results', async () => {
     await expect(findByText('Official ACL 2019 Playlist')).resolves.toBeTruthy();
     await expect(findByText('ACL 2019')).resolves.toBeTruthy();
 });
+
+it('shows loading while waiting for results', async () => {
+    // eslint-disable-next-line no-empty-function
+    SearchService.searchPlaylist.mockReturnValue(new Promise(() => {}));
+
+    const {
+        getByPlaceholderText,
+        getByText,
+        queryByText,
+        findByTestId
+    } = render(<SearchArea />);
+
+    const searchBox = getByPlaceholderText('Search by artist');
+    const submitButton = getByText('Search');
+
+    fireEvent.change(searchBox, { target: { value: 'unending search' } });
+    fireEvent.click(submitButton);
+
+    expect(queryByText('Please specify your search.')).toBeNull();
+    await expect(findByTestId('Loading')).resolves.toBeTruthy();
+});

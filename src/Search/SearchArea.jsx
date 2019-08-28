@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './SearchArea.scss';
+import Loading from '../Common/Loading/Loading';
 import SearchControls from './SearchControls';
 import SearchResults from './SearchResults';
 import SearchService from './SearchService';
@@ -7,11 +8,13 @@ import SearchService from './SearchService';
 const SearchArea = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const searchForX = (searchFunction, searchTerm) => {
         return searchFunction(searchTerm)
             .then((response) => setSearchResults(response))
-            .catch(() => setErrorMessage('Spotify search failed.'));
+            .catch(() => setErrorMessage('Spotify search failed.'))
+            .finally(() => setIsLoading(false));
     };
 
     const search = (searchTerm, searchType) => {
@@ -21,6 +24,8 @@ const SearchArea = () => {
         }
 
         setErrorMessage('');
+        setIsLoading(true);
+        setSearchResults([]);
 
         if (searchType === 'artist') {
             searchForX(SearchService.searchArtist, searchTerm);
@@ -36,6 +41,11 @@ const SearchArea = () => {
                 errorMessage === '' ?
                     null :
                     <div className="error"><strong>{errorMessage}</strong></div>
+            }
+            {
+                isLoading ?
+                    <Loading /> :
+                    null
             }
             <SearchResults results={searchResults}/>
         </div>);
