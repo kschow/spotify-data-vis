@@ -3,7 +3,8 @@ import rp from 'request-promise-native';
 const buildOptions = (searchTerm, type) => {
     return {
         json: true,
-        uri: `http://localhost:8080/search/${type}?search=${searchTerm}`
+        // eslint-disable-next-line no-process-env,no-undef
+        uri: `${process.env.SPOTIFY_API_ROOT_URL}/search/${type}?search=${searchTerm}`
     };
 };
 
