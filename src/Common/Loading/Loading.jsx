@@ -5,8 +5,7 @@ const Loading = () => {
     const [displayMessage, setDisplayMessage] = useState(false);
 
     useEffect(() => {
-        let timer = null;
-        timer = setTimeout(() => setDisplayMessage(true), 300);
+        const timer = setTimeout(() => setDisplayMessage(true), 300);
         return () => clearTimeout(timer);
     }, []);
 
