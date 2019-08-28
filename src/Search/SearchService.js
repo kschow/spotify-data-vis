@@ -4,7 +4,7 @@ const buildOptions = (searchTerm, type) => {
     return {
         json: true,
         // eslint-disable-next-line no-process-env,no-undef
-        uri: `${process.env.SPOTIFY_API_ROOT_URL}/search/${type}?search=${searchTerm}`
+        uri: `${process.env.REACT_APP_SPOTIFY_API_ROOT_URL}/search/${type}?search=${searchTerm}`
     };
 };
 
