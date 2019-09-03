@@ -5,6 +5,10 @@ import SearchService from '../SearchService';
 
 jest.mock('../SearchService');
 
+afterEach(() => {
+    jest.resetAllMocks();
+});
+
 it('searching without specifying search terms leads to an error message', () => {
     const { getByPlaceholderText, getByText } = render(<SearchArea />);
 

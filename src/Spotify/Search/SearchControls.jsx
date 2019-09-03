@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 
-const SearchControls = ({ search }) => {
+const SearchControls = ({ searchType, setSearchType, search }) => {
     const [searchText, setSearchText] = useState('');
-    const [searchType, setSearchType] = useState('artist');
 
     const handleSearchTextChange = (event) => {
         setSearchText(event.target.value);
@@ -40,6 +39,8 @@ const SearchControls = ({ search }) => {
 };
 
 SearchControls.propTypes = {
+    searchType: PropTypes.string,
+    setSearchType: PropTypes.func,
     search: PropTypes.func
 };
 

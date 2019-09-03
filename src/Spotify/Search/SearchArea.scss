@@ -1,5 +1,4 @@
 .SearchControls {
-
   :nth-child(n) {
     font-size: 1.25rem;
     margin: .25rem;
@@ -31,6 +30,11 @@
   display: flex;
   padding: .5rem;
   border-bottom: 1px solid black;
+  cursor: pointer;
+
+  &:hover {
+    background: #ddd;
+  }
 
   .image-container {
     min-width: 4rem;

@@ -1,8 +1,8 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import SearchResult from './SearchResult';
 
-const SearchResults = ({ results }) => {
+const SearchResults = ({ results, getTracks }) => {
     return (
         results.isEmpty ?
             null :
@@ -15,6 +15,7 @@ const SearchResults = ({ results }) => {
                             name={result.name}
                             imageUrls={result.imageUrls}
                             popularity={result.popularity}
+                            getTracks={getTracks}
                         />;
                     })
                 }
@@ -23,7 +24,8 @@ const SearchResults = ({ results }) => {
 };
 
 SearchResults.propTypes = {
-    results: PropTypes.arrayOf(PropTypes.object)
+    results: PropTypes.arrayOf(PropTypes.object),
+    getTracks: PropTypes.func
 };
 
 export default SearchResults;

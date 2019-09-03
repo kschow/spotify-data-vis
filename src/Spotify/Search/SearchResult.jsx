@@ -1,9 +1,19 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
-const SearchResult = ({ name, imageUrls, popularity }) => {
+const SearchResult = ({
+    spotifyId,
+    name,
+    imageUrls,
+    popularity,
+    getTracks
+}) => {
+    const onClickHandler = () => {
+        getTracks(spotifyId);
+    };
+
     return (
-        <div className="SearchResult">
+        <div className="SearchResult" onClick={onClickHandler}>
             <div className="image-container">
                 {
                     imageUrls.length > 0 ?
@@ -24,8 +34,10 @@ const SearchResult = ({ name, imageUrls, popularity }) => {
 };
 
 SearchResult.propTypes = {
+    spotifyId: PropTypes.string,
     name: PropTypes.string,
     imageUrls: PropTypes.arrayOf(PropTypes.string),
-    popularity: PropTypes.number
+    popularity: PropTypes.number,
+    getTracks: PropTypes.func
 };
 export default SearchResult;

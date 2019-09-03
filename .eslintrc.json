@@ -62,6 +62,7 @@
         "no-ternary": "off",
         "operator-linebreak": [2, "after"],
         "sort-keys": "off",
-        "max-statements": "off"
+        "max-statements": "off",
+        "max-lines-per-function": "off"
     }
 }

@@ -1,11 +1,11 @@
-import './App.scss';
 import React from 'react';
-import SearchArea from './Search/SearchArea';
+import './App.scss';
+import { Pane } from './Spotify/Pane';
 
 const App = () => {
     return (
         <div className="App">
-            <SearchArea />
+            <Pane />
         </div>
     );
 };
