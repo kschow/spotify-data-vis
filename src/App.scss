@@ -2,7 +2,13 @@
   text-align: center;
 }
 
-a {
+.link-button {
+  background-color: transparent;
+  border: none;
   cursor: pointer;
+  display: inline;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
   color: #05f;
 }

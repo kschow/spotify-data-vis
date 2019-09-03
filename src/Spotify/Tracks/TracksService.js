@@ -19,7 +19,6 @@ const buildOptions = (spotifyId, type) => {
 
 const TracksService = {
     getArtistTracks: (spotifyId) => {
-        console.log('hello?');
         return rp(buildOptions(spotifyId, 'artist'));
     },
     getPlaylistTracks: (spotifyId) => {

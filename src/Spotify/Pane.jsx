@@ -36,7 +36,9 @@ export const Pane = () => {
                 {
                     isEmpty(tracks) ?
                         null :
-                        <a onClick={toggleSearchAndVisualization}>Show visualization</a>
+                        <button className="link-button" onClick={toggleSearchAndVisualization}>
+                            Show visualization
+                        </button>
                 }
             </>
         );
@@ -46,7 +48,9 @@ export const Pane = () => {
         return (
             <>
                 <VisualizationArea tracks={tracks} />
-                <a onClick={toggleSearchAndVisualization}>Go back to search</a>
+                <button className="link-button" onClick={toggleSearchAndVisualization}>
+                    Go back to search
+                </button>
             </>
         );
     };
