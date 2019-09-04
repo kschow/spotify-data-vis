@@ -1,38 +1,48 @@
-import { isEmpty } from 'lodash/lang';
-import React, { useState } from 'react';
+import { isEmpty } from 'lodash';
+import React, { useCallback, useEffect, useState } from 'react';
 import SearchArea from './Search/SearchArea';
-import TracksService from './Tracks/TracksService';
+import { SearchProvider } from './Search/Service/SearchContext';
+import { TrackInfoProvider, useTrackInfo } from './TrackInfo/TrackInfoContext';
 import VisualizationArea from './Visualization/VisualizationArea';
 
-export const Pane = () => {
-    const [tracks, setTracks] = useState({});
+const Pane = () => {
+    return (
+        <>
+            <SearchProvider>
+                <TrackInfoProvider>
+                    <SearchAndVisualizationArea />
+                </TrackInfoProvider>
+            </SearchProvider>
+        </>
+    );
+};
+
+const SearchAndVisualizationArea = () => {
     // true means show search area, false means show visualization area
     const [searchAndVisualization, setSearchAndVisualization] = useState(true);
+    const { tracks, isLoading } = useTrackInfo();
 
-    const toggleSearchAndVisualization = () => {
+    const toggleSearchAndVisualization = useCallback(() => {
         setSearchAndVisualization(!searchAndVisualization);
-    };
+    }, [searchAndVisualization]);
 
-    const getTracksForX = (getFn, spotifyId) => {
-        return getFn(spotifyId)
-            .then((results) => {
-                setTracks(results);
+    useEffect(
+        () => {
+            if (searchAndVisualization && isLoading) {
                 toggleSearchAndVisualization();
-            });
-    };
-
-    const getTracks = (spotifyId, type) => {
-        if (type === 'artist') {
-            getTracksForX(TracksService.getArtistTracks, spotifyId);
-        } else if (type === 'playlist') {
-            getTracksForX(TracksService.getPlaylistTracks, spotifyId);
-        }
-    };
+            }
+        },
+        [
+            searchAndVisualization,
+            isLoading,
+            toggleSearchAndVisualization
+        ]
+    );
 
     const displaySearchArea = () => {
         return (
             <>
-                <SearchArea getTracks={getTracks} />
+                <SearchArea />
                 {
                     isEmpty(tracks) ?
                         null :
@@ -47,10 +57,14 @@ export const Pane = () => {
     const displayVisualizationArea = () => {
         return (
             <>
-                <VisualizationArea tracks={tracks} />
-                <button className="link-button" onClick={toggleSearchAndVisualization}>
-                    Go back to search
-                </button>
+                <VisualizationArea />
+                {
+                    isLoading ?
+                        null :
+                        <button className="link-button" onClick={toggleSearchAndVisualization}>
+                            Go back to search
+                        </button>
+                }
             </>
         );
     };
@@ -65,3 +79,5 @@ export const Pane = () => {
         </div>
     );
 };
+
+export default Pane;

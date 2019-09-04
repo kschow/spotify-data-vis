@@ -17,7 +17,7 @@ const buildOptions = (spotifyId, type) => {
     };
 };
 
-const TracksService = {
+const TrackInfoService = {
     getArtistTracks: (spotifyId) => {
         return rp(buildOptions(spotifyId, 'artist'));
     },
@@ -26,4 +26,4 @@ const TracksService = {
     }
 };
 
-export default TracksService;
+export { TrackInfoService };

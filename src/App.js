@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.scss';
-import { Pane } from './Spotify/Pane';
+import Pane from './Spotify/Pane';
 
 const App = () => {
     return (

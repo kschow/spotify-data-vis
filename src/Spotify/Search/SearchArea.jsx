@@ -1,41 +1,13 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import Loading from '../../Common/Loading/Loading';
 import './SearchArea.scss';
 import SearchControls from './SearchControls';
 import SearchResults from './SearchResults';
-import SearchService from './SearchService';
+import { useSearch } from './Service/SearchContext';
 
 const SearchArea = ({ getTracks }) => {
-    const [searchType, setSearchType] = useState('artist');
-
-    const [errorMessage, setErrorMessage] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const searchForX = (searchFunction, searchTerm) => {
-        return searchFunction(searchTerm)
-            .then((response) => setSearchResults(response))
-            .catch(() => setErrorMessage('Spotify search failed.'))
-            .finally(() => setIsLoading(false));
-    };
-
-    const search = (searchTerm, type) => {
-        if (searchTerm === '') {
-            setErrorMessage('Please specify your search.');
-            return;
-        }
-
-        setErrorMessage('');
-        setIsLoading(true);
-        setSearchResults([]);
-
-        if (type === 'artist') {
-            searchForX(SearchService.searchArtist, searchTerm);
-        } else if (type === 'playlist') {
-            searchForX(SearchService.searchPlaylist, searchTerm);
-        }
-    };
+    const { searchType, errorMessage, isLoading } = useSearch();
 
     const getTrackInfo = (spotifyId) => {
         getTracks(spotifyId, searchType);
@@ -43,10 +15,7 @@ const SearchArea = ({ getTracks }) => {
 
     return (
         <div>
-            <SearchControls
-                searchType={searchType}
-                setSearchType={setSearchType}
-                search={search} />
+            <SearchControls />
             {
                 errorMessage === '' ?
                     null :
@@ -57,10 +26,9 @@ const SearchArea = ({ getTracks }) => {
                     <Loading /> :
                     null
             }
-            <SearchResults
-                results={searchResults}
-                getTracks={getTrackInfo} />
-        </div>);
+            <SearchResults getTracks={getTrackInfo} />
+        </div>
+    );
 };
 
 SearchArea.propTypes = {

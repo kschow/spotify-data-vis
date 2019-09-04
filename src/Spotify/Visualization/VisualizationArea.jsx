@@ -1,18 +1,26 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
+import Loading from '../../Common/Loading/Loading';
+import { useTrackInfo } from '../TrackInfo/TrackInfoContext';
 
-const VisualizationArea = ({ tracks }) => {
-    return Object.values(tracks).map((track) => {
-        return (
-            <div key={track.spotifyId}>
-                {track.spotifyId}
-            </div>
-        );
-    });
-};
-
-VisualizationArea.propTypes = {
-    tracks: PropTypes.object
+const VisualizationArea = () => {
+    const { tracks, isLoading } = useTrackInfo();
+    return (
+        <>
+            {
+                isLoading ?
+                    <Loading/> :
+                    Object.values(tracks)
+                        .map((track) => {
+                            return (
+                                <div key={track.spotifyId}>
+                                    {track.spotifyId}
+                                </div>
+                            );
+                        })
+            }
+        </>
+    );
 };
 
 export default VisualizationArea;

@@ -1,8 +1,10 @@
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { useSearch } from './Service/SearchContext';
 
-const SearchControls = ({ searchType, setSearchType, search }) => {
+const SearchControls = () => {
     const [searchText, setSearchText] = useState('');
+
+    const { searchType, setSearchType, search } = useSearch();
 
     const handleSearchTextChange = (event) => {
         setSearchText(event.target.value);
@@ -36,12 +38,6 @@ const SearchControls = ({ searchType, setSearchType, search }) => {
             </form>
         </div>
     );
-};
-
-SearchControls.propTypes = {
-    searchType: PropTypes.string,
-    setSearchType: PropTypes.func,
-    search: PropTypes.func
 };
 
 export default SearchControls;

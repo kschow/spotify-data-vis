@@ -1,18 +1,19 @@
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
-import { Pane } from '../Pane';
-import SearchService from '../Search/SearchService';
-import TracksService from '../Tracks/TracksService';
+import Pane from '../Pane';
+import { SearchService } from '../Search/Service/SearchService';
+import { TrackInfoService } from '../TrackInfo/TrackInfoService';
 
-jest.mock('../Search/SearchService');
-jest.mock('../Tracks/TracksService');
+jest.mock('../Search/Service/SearchService');
+jest.mock('../TrackInfo/TrackInfoService');
 
 afterEach(() => {
     jest.resetAllMocks();
 });
 
 it('Clicking a search result with tracks switches view to visualization ' +
-    'with an option to switch the view back', async () => {
+    'with an option to switch the view back, ' +
+    'clicking that option switches the view back with existing search results', async () => {
     const searchResults = [
         {
             'spotifyId': 'id 1',
@@ -47,7 +48,7 @@ it('Clicking a search result with tracks switches view to visualization ' +
                 timeSignature: 4
             }
         };
-    TracksService.getArtistTracks.mockResolvedValue(trackInfo);
+    TrackInfoService.getArtistTracks.mockResolvedValue(trackInfo);
 
     const { getByPlaceholderText, getByText, queryByText, findByText } = render(<Pane />);
 
@@ -67,4 +68,9 @@ it('Clicking a search result with tracks switches view to visualization ' +
     expect(queryByText('Test Artist 1')).toBeNull();
 
     expect(queryByText('Go back to search')).toBeTruthy();
+    const returnToSearch = getByText('Go back to search');
+
+    fireEvent.click(returnToSearch);
+
+    expect(queryByText('Test Artist 1')).toBeTruthy();
 });

@@ -1,16 +1,24 @@
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
+import { TrackInfoProvider } from '../../TrackInfo/TrackInfoContext';
 import SearchArea from '../SearchArea';
-import SearchService from '../SearchService';
+import { SearchProvider } from '../Service/SearchContext';
+import { SearchService } from '../Service/SearchService';
 
-jest.mock('../SearchService');
+jest.mock('../Service/SearchService');
 
 afterEach(() => {
     jest.resetAllMocks();
 });
 
 it('searching without specifying search terms leads to an error message', () => {
-    const { getByPlaceholderText, getByText } = render(<SearchArea />);
+    const component =
+        <SearchProvider>
+            <TrackInfoProvider>
+                <SearchArea />
+            </TrackInfoProvider>
+        </SearchProvider>;
+    const { getByPlaceholderText, getByText } = render(component);
 
     const searchBox = getByPlaceholderText('Search by artist');
     expect(searchBox.text).toBeUndefined();
@@ -24,7 +32,13 @@ it('searching without specifying search terms leads to an error message', () => 
 });
 
 it('switching to playlist search changes the placeholder text', () => {
-    const { getByPlaceholderText, queryByPlaceholderText, getByDisplayValue } = render(<SearchArea />);
+    const component =
+        <SearchProvider>
+            <TrackInfoProvider>
+                <SearchArea />
+            </TrackInfoProvider>
+        </SearchProvider>;
+    const { getByPlaceholderText, queryByPlaceholderText, getByDisplayValue } = render(component);
 
     const searchBox = getByPlaceholderText('Search by artist');
     expect(searchBox.text).toBeUndefined();
@@ -52,7 +66,13 @@ it('searching for an artist that returns results shows results', async () => {
     ];
     SearchService.searchArtist.mockResolvedValue(results);
 
-    const { getByPlaceholderText, getByText, queryByText, findByText } = render(<SearchArea />);
+    const component =
+        <SearchProvider>
+            <TrackInfoProvider>
+                <SearchArea />
+            </TrackInfoProvider>
+        </SearchProvider>;
+    const { getByPlaceholderText, getByText, queryByText, findByText } = render(component);
 
     const searchBox = getByPlaceholderText('Search by artist');
     const submitButton = getByText('Search');
@@ -81,13 +101,19 @@ it('searching for a playlist that returns results shows results', async () => {
     ];
     SearchService.searchPlaylist.mockResolvedValue(results);
 
+    const component =
+        <SearchProvider>
+            <TrackInfoProvider>
+                <SearchArea />
+            </TrackInfoProvider>
+        </SearchProvider>;
     const {
         getByPlaceholderText,
         getByText,
         queryByText,
         findByText,
         getByDisplayValue
-    } = render(<SearchArea />);
+    } = render(component);
 
     const searchBox = getByPlaceholderText('Search by artist');
     const dropdown = getByDisplayValue('Artist');
@@ -106,12 +132,18 @@ it('shows loading while waiting for results', async () => {
     // eslint-disable-next-line no-empty-function
     SearchService.searchArtist.mockReturnValue(new Promise(() => {}));
 
+    const component =
+        <SearchProvider>
+            <TrackInfoProvider>
+                <SearchArea />
+            </TrackInfoProvider>
+        </SearchProvider>;
     const {
         getByPlaceholderText,
         getByText,
         queryByText,
         findByTestId
-    } = render(<SearchArea />);
+    } = render(component);
 
     const searchBox = getByPlaceholderText('Search by artist');
     const submitButton = getByText('Search');

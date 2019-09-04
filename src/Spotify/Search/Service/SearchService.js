@@ -17,4 +17,4 @@ const SearchService = {
     }
 };
 
-export default SearchService;
+export { SearchService };
