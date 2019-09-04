@@ -3,12 +3,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { TrackInfoService } from './TrackInfoService';
 
-const contextShape = {
-    tracks: {},
-    errorMessage: '',
-    isLoading: false,
-    getTracks: () => {}
-};
 const TrackInfoContext = createContext(undefined);
 
 const TrackInfoProvider = (props) => {

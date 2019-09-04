@@ -3,14 +3,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { SearchService } from './SearchService';
 
-const contextShape = {
-    searchType: '',
-    searchResults: [],
-    errorMessage: '',
-    isLoading: false,
-    setSearchType: () => {},
-    search: () => {}
-};
 const SearchContext = createContext(undefined);
 
 const SearchProvider = (props) => {

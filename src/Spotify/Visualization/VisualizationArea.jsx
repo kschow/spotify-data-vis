@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Loading from '../../Common/Loading/Loading';
 import { useTrackInfo } from '../TrackInfo/TrackInfoContext';
 
