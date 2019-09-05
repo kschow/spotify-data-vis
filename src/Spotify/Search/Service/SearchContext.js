@@ -1,5 +1,4 @@
 /* eslint-disable no-undefined */
-/* eslint-disable no-empty-function */
 import React, { createContext, useContext, useState } from 'react';
 import { SearchService } from './SearchService';
 

@@ -50,7 +50,7 @@ it('Clicking a search result with tracks switches view to visualization ' +
         };
     TrackInfoService.getArtistTracks.mockResolvedValue(trackInfo);
 
-    const { getByPlaceholderText, getByText, queryByText, findByText } = render(<Pane />);
+    const { getByPlaceholderText, getByText, queryByText, findByText, findByTestId } = render(<Pane />);
 
     const searchBox = getByPlaceholderText('Search by artist');
     const submitButton = getByText('Search');
@@ -64,7 +64,7 @@ it('Clicking a search result with tracks switches view to visualization ' +
 
     fireEvent.click(result);
 
-    await expect(findByText('test track id')).resolves.toBeTruthy();
+    await expect(findByTestId('chart')).resolves.toBeTruthy();
     expect(queryByText('Test Artist 1')).toBeNull();
 
     expect(queryByText('Go back to search')).toBeTruthy();

@@ -64,6 +64,9 @@
         "operator-linebreak": [2, "after"],
         "sort-keys": "off",
         "max-statements": "off",
-        "max-lines-per-function": "off"
+        "max-lines-per-function": "off",
+        "object-property-newline": [2, {"allowAllPropertiesOnSameLine": true}],
+        "max-lines": "off",
+        "no-plusplus": "off"
     }
 }
