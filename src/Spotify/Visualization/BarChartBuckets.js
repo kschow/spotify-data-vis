@@ -121,6 +121,8 @@ const TIME_BUCKETS = [
     { count: 0, display: '7' }
 ];
 
+const MODE_BUCKETS = [{ count: 0, display: 'minor' }, { count: 0, display: 'major' }];
+
 const simpleMapFunction = (data, key) => data[key];
 
 // this function looks to map the space from 0 to 1 into 20 equally sized buckets
@@ -227,7 +229,7 @@ const AUDIO_FEATURES = {
         units: '',
         mapFunction: (data) => simpleMapFunction(data, 'mode'),
         reduceFunction: simpleReduceFunction,
-        buckets: { 0: { count: 0, display: 'minor' }, 1: { count: 0, display: 'major' } }
+        buckets: MODE_BUCKETS
     },
     acousticness: {
         displayName: 'acousticness',
@@ -316,3 +318,5 @@ export const countFeatures = (tracks, feature) => {
             cloneDeep(AUDIO_FEATURES[feature].buckets)
         );
 };
+
+export const audioFeatureList = Object.keys(AUDIO_FEATURES);
