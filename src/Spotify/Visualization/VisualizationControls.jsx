@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { audioFeatureList } from './BarChartBuckets';
+import { AUDIO_FEATURES } from './BarChartBuckets';
 
 const VisualizationControls = ({ bucket, setBucket }) => {
     const handleSelectChange = (event) => {
@@ -14,7 +14,17 @@ const VisualizationControls = ({ bucket, setBucket }) => {
                 onChange={handleSelectChange}
             >
                 {
-                    audioFeatureList.map((feature) => <option key={feature}>{feature}</option>)
+                    Object.entries(AUDIO_FEATURES).map((feature) => {
+                        const [key, value] = feature;
+                        return (
+                            <option
+                                key={key}
+                                value={key}
+                            >
+                                {value.displayName}
+                            </option>
+                        );
+                    })
                 }
             </select>
         </div>

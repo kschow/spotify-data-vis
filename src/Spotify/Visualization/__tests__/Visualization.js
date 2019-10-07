@@ -44,15 +44,15 @@ it('changing the visualization control value changes the axis labels and bottom 
 
     const { getAllByText, queryByText, getByDisplayValue } = render(component);
 
-    const loudnessElements = getAllByText('loudness');
+    const loudnessElements = getAllByText(/loudness/iu);
     expect(loudnessElements).toHaveLength(2);
     expect(queryByText('-12')).toBeTruthy();
     expect(queryByText('C#/Db')).toBeNull();
 
-    const groupingDropdown = getByDisplayValue('loudness');
+    const groupingDropdown = getByDisplayValue(/loudness/iu);
     fireEvent.change(groupingDropdown, { target: { value: 'key' } });
 
-    const keyElements = getAllByText('key');
+    const keyElements = getAllByText(/key/iu);
     expect(keyElements).toHaveLength(2);
     expect(queryByText('-12')).toBeNull();
     expect(queryByText('C#/Db')).toBeTruthy();

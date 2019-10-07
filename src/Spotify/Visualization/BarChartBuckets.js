@@ -27,72 +27,42 @@ const DURATION_BUCKETS = [
 
 const ZERO_ONE_BUCKETS = [
     { count: 0, display: '0.00' },
-    { count: 0, display: '0.05' },
     { count: 0, display: '0.10' },
-    { count: 0, display: '0.15' },
     { count: 0, display: '0.20' },
-    { count: 0, display: '0.25' },
     { count: 0, display: '0.30' },
-    { count: 0, display: '0.35' },
     { count: 0, display: '0.40' },
-    { count: 0, display: '0.45' },
     { count: 0, display: '0.50' },
-    { count: 0, display: '0.55' },
     { count: 0, display: '0.60' },
-    { count: 0, display: '0.65' },
     { count: 0, display: '0.70' },
-    { count: 0, display: '0.75' },
     { count: 0, display: '0.80' },
-    { count: 0, display: '0.85' },
     { count: 0, display: '0.90' },
-    { count: 0, display: '0.95' },
     { count: 0, display: '1.00' }
 ];
 
 const POPULARITY_BUCKETS = [
-    { count: 0, display: '5' },
     { count: 0, display: '10' },
-    { count: 0, display: '15' },
     { count: 0, display: '20' },
-    { count: 0, display: '25' },
     { count: 0, display: '30' },
-    { count: 0, display: '35' },
     { count: 0, display: '40' },
-    { count: 0, display: '45' },
     { count: 0, display: '50' },
-    { count: 0, display: '55' },
     { count: 0, display: '60' },
-    { count: 0, display: '65' },
     { count: 0, display: '70' },
-    { count: 0, display: '75' },
     { count: 0, display: '80' },
-    { count: 0, display: '85' },
     { count: 0, display: '90' },
-    { count: 0, display: '95' },
     { count: 0, display: '100' }
 ];
 
 const TEMPO_BUCKETS = [
     { count: 0, display: '0' },
-    { count: 0, display: '10' },
     { count: 0, display: '20' },
-    { count: 0, display: '30' },
     { count: 0, display: '40' },
-    { count: 0, display: '50' },
     { count: 0, display: '60' },
-    { count: 0, display: '70' },
     { count: 0, display: '80' },
-    { count: 0, display: '90' },
     { count: 0, display: '100' },
-    { count: 0, display: '110' },
     { count: 0, display: '120' },
-    { count: 0, display: '130' },
     { count: 0, display: '140' },
-    { count: 0, display: '150' },
     { count: 0, display: '160' },
-    { count: 0, display: '170' },
     { count: 0, display: '180' },
-    { count: 0, display: '190' },
     { count: 0, display: '200+' }
 ];
 
@@ -125,18 +95,26 @@ const MODE_BUCKETS = [{ count: 0, display: 'minor' }, { count: 0, display: 'majo
 
 const simpleMapFunction = (data, key) => data[key];
 
-// this function looks to map the space from 0 to 1 into 20 equally sized buckets
+// fix issue with time signature and 0 index mismatch
+const timeSignatureFunction = (data) => {
+    if (isNil(data.timeSignature) || data.timeSignature < 1) {
+        return NOT_AVAILABLE;
+    }
+    return data.timeSignature - 1;
+};
+
+// this function looks to map the space from 0 to 1 into 10 equally sized buckets
 const zeroOneMapFunction = (data, key) => {
     return isNil(data[key]) ?
         NOT_AVAILABLE :
-        Math.floor(data[key] * 20);
+        Math.floor(data[key] * 10);
 };
 
-// this function looks to map the space from 0 to 100 into 20 equally sized buckets
+// this function looks to map the space from 0 to 100 into 10 equally sized buckets
 const zeroOneHundredMapFunction = (data, key) => {
     return isNil(data[key]) ?
         NOT_AVAILABLE :
-        Math.floor(data[key] / 5);
+        Math.floor(data[key] / 10);
 };
 
 const loudnessMapFunction = (data) => {
@@ -176,9 +154,9 @@ const tempoMapFunction = (data) => {
         return NOT_AVAILABLE;
     }
     if (data.tempo > 200) {
-        return 20;
+        return 10;
     }
-    return Math.floor(data.tempo / 10);
+    return Math.floor(data.tempo / 20);
 };
 
 // buckets for duration go in one minute intervals up to 6, everything 7 minutes+ is in the same bucket
@@ -202,111 +180,126 @@ const simpleReduceFunction = (data, key) => {
     return data;
 };
 
-const AUDIO_FEATURES = {
+export const AUDIO_FEATURES = {
     loudness: {
-        displayName: 'loudness',
+        displayName: 'Loudness',
         units: 'dB',
         mapFunction: loudnessMapFunction,
         reduceFunction: simpleReduceFunction,
-        buckets: LOUDNESS_BUCKETS
+        buckets: LOUDNESS_BUCKETS,
+        chartDomainPadding: 20
     },
     energy: {
-        displayName: 'energy',
+        displayName: 'Energy',
         units: '',
         mapFunction: (data) => zeroOneMapFunction(data, 'energy'),
         reduceFunction: simpleReduceFunction,
-        buckets: ZERO_ONE_BUCKETS
+        buckets: ZERO_ONE_BUCKETS,
+        chartDomainPadding: 20
     },
     key: {
-        displayName: 'key',
+        displayName: 'Key',
         units: '',
         mapFunction: (data) => simpleMapFunction(data, 'key'),
         reduceFunction: simpleReduceFunction,
-        buckets: KEY_BUCKETS
+        buckets: KEY_BUCKETS,
+        chartDomainPadding: 20
     },
     mode: {
-        displayName: 'mode',
+        displayName: 'Mode',
         units: '',
         mapFunction: (data) => simpleMapFunction(data, 'mode'),
         reduceFunction: simpleReduceFunction,
-        buckets: MODE_BUCKETS
+        buckets: MODE_BUCKETS,
+        chartDomainPadding: 100
     },
     acousticness: {
-        displayName: 'acousticness',
+        displayName: 'Acousticness',
         units: '',
         mapFunction: (data) => zeroOneMapFunction(data, 'acousticness'),
         reduceFunction: simpleReduceFunction,
-        buckets: ZERO_ONE_BUCKETS
+        buckets: ZERO_ONE_BUCKETS,
+        chartDomainPadding: 20
     },
     speechiness: {
-        displayName: 'speechiness',
+        displayName: 'Speechiness',
         units: '',
         mapFunction: (data) => zeroOneMapFunction(data, 'speechiness'),
         reduceFunction: simpleReduceFunction,
-        buckets: ZERO_ONE_BUCKETS
+        buckets: ZERO_ONE_BUCKETS,
+        chartDomainPadding: 20
     },
     instrumentalness: {
-        displayName: 'instrumentalness',
+        displayName: 'Instrumentalness',
         units: '',
         mapFunction: (data) => zeroOneMapFunction(data, 'instrumentalness'),
         reduceFunction: simpleReduceFunction,
-        buckets: ZERO_ONE_BUCKETS
+        buckets: ZERO_ONE_BUCKETS,
+        chartDomainPadding: 20
     },
     liveness: {
-        displayName: 'liveness',
+        displayName: 'Liveness',
         units: '',
         mapFunction: (data) => zeroOneMapFunction(data, 'liveness'),
         reduceFunction: simpleReduceFunction,
-        buckets: ZERO_ONE_BUCKETS
+        buckets: ZERO_ONE_BUCKETS,
+        chartDomainPadding: 20
     },
     valence: {
-        displayName: 'valence',
+        displayName: 'Valence',
         units: '',
         mapFunction: (data) => zeroOneMapFunction(data, 'valence'),
         reduceFunction: simpleReduceFunction,
-        buckets: ZERO_ONE_BUCKETS
+        buckets: ZERO_ONE_BUCKETS,
+        chartDomainPadding: 20
     },
     tempo: {
-        displayName: 'tempo',
+        displayName: 'Tempo',
         units: 'bpm',
         mapFunction: tempoMapFunction,
         reduceFunction: simpleReduceFunction,
-        buckets: TEMPO_BUCKETS
+        buckets: TEMPO_BUCKETS,
+        chartDomainPadding: 20
     },
     danceability: {
-        displayName: 'danceability',
+        displayName: 'Danceability',
         units: '',
         mapFunction: (data) => zeroOneMapFunction(data, 'danceability'),
         reduceFunction: simpleReduceFunction,
-        buckets: ZERO_ONE_BUCKETS
+        buckets: ZERO_ONE_BUCKETS,
+        chartDomainPadding: 20
     },
     trackNumber: {
-        displayName: 'track number',
+        displayName: 'Track Number',
         units: '',
         mapFunction: (data) => simpleMapFunction(data, 'trackNumber'),
         reduceFunction: simpleReduceFunction,
-        buckets: []
+        buckets: [],
+        chartDomainPadding: 20
     },
     durationMs: {
-        displayName: 'duration (ms)',
+        displayName: 'Duration',
         units: 'minutes',
         mapFunction: durationMapFunction,
         reduceFunction: simpleReduceFunction,
-        buckets: DURATION_BUCKETS
+        buckets: DURATION_BUCKETS,
+        chartDomainPadding: 20
     },
     timeSignature: {
-        displayName: 'time signature',
+        displayName: 'Time Signature',
         units: 'x/4',
-        mapFunction: (data) => simpleMapFunction(data, 'timeSignature'),
+        mapFunction: (data) => timeSignatureFunction(data),
         reduceFunction: simpleReduceFunction,
-        buckets: TIME_BUCKETS
+        buckets: TIME_BUCKETS,
+        chartDomainPadding: 20
     },
     popularity: {
-        displayName: 'popularity',
+        displayName: 'Popularity',
         units: '',
         mapFunction: (data) => zeroOneHundredMapFunction(data, 'popularity'),
         reduceFunction: simpleReduceFunction,
-        buckets: POPULARITY_BUCKETS
+        buckets: POPULARITY_BUCKETS,
+        chartDomainPadding: 20
     }
 };
 
@@ -318,5 +311,3 @@ export const countFeatures = (tracks, feature) => {
             cloneDeep(AUDIO_FEATURES[feature].buckets)
         );
 };
-
-export const audioFeatureList = Object.keys(AUDIO_FEATURES);

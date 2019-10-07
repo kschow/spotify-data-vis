@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { VictoryBar, VictoryChart, VictoryLabel } from 'victory';
 import Loading from '../../Common/Loading/Loading';
 import { useTrackInfo } from '../TrackInfo/TrackInfoContext';
-import { countFeatures } from './BarChartBuckets';
+import { countFeatures, AUDIO_FEATURES } from './BarChartBuckets';
+import { isEmpty } from 'lodash';
 import './Visualization.scss';
 import VisualizationControls from './VisualizationControls';
 
+/* eslint-disable id-length */
 const VisualizationArea = () => {
     const { tracks, isLoading } = useTrackInfo();
     const [barchartData, setBarchartData] = useState([]);
@@ -14,6 +16,12 @@ const VisualizationArea = () => {
     useEffect(() => {
         setBarchartData(countFeatures(tracks, bucket));
     }, [tracks, bucket]);
+
+    const unitText = isEmpty(AUDIO_FEATURES[bucket].units) ?
+        '' :
+        `(${AUDIO_FEATURES[bucket].units})`;
+
+    const labelText = `${AUDIO_FEATURES[bucket].displayName} ${unitText}`;
 
     return (
         <>
@@ -27,12 +35,12 @@ const VisualizationArea = () => {
                         />
                         <div className="chart" data-testid="chart">
                             <VictoryChart
-                                domainPadding={20}
+                                domainPadding={{ x: AUDIO_FEATURES[bucket].chartDomainPadding }}
                                 width={700}
                                 height={350}
                             >
                                 <VictoryLabel
-                                    text={bucket}
+                                    text={labelText}
                                     x={350}
                                     y={340}
                                     textAnchor={'middle'}
