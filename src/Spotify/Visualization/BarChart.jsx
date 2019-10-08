@@ -2,16 +2,18 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel } from 'victory';
 import { countFeatures, getFeatureDomainPadding, getFeatureLabelText } from './Features';
+import { useVisualizationControls } from './VisualizationControls/VisualizationControlsContext';
 
 /* eslint-disable id-length */
-const BarChart = ({ tracks, feature }) => {
-    const labelText = getFeatureLabelText(feature);
-    const barChartData = countFeatures(tracks, feature);
+const BarChart = ({ tracks }) => {
+    const { barChartFeature } = useVisualizationControls();
+    const labelText = getFeatureLabelText(barChartFeature);
+    const barChartData = countFeatures(tracks, barChartFeature);
 
     return (
         <div className="Chart" data-testid="bar-chart">
             <VictoryChart
-                domainPadding={{ x: getFeatureDomainPadding(feature) }}
+                domainPadding={{ x: getFeatureDomainPadding(barChartFeature) }}
                 width={700}
                 height={350}
             >
@@ -36,8 +38,7 @@ const BarChart = ({ tracks, feature }) => {
 };
 
 BarChart.propTypes = {
-    tracks: PropTypes.object,
-    feature: PropTypes.string
+    tracks: PropTypes.object
 };
 
 export default BarChart;

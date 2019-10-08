@@ -1,12 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { AUDIO_FEATURES } from './Features';
-import '../../Common/Styles/Controls.scss';
+import '../../../Common/Styles/Controls.scss';
+import { AUDIO_FEATURES } from '../Features';
+import './VisualizationControls.scss';
+import { useVisualizationControls } from './VisualizationControlsContext';
 
 /* eslint-disable id-length */
-const VisualizationControls = ({ feature, setFeature }) => {
+const VisualizationControls = () => {
+    const { barChartFeature, setBarChartFeature } = useVisualizationControls();
     const handleSelectChange = (event) => {
-        setFeature(event.target.value);
+        setBarChartFeature(event.target.value);
     };
 
     return (
@@ -15,7 +17,7 @@ const VisualizationControls = ({ feature, setFeature }) => {
                 <label htmlFor="feature">Feature:</label>
                 <select
                     id="feature"
-                    value={feature}
+                    value={barChartFeature}
                     onChange={handleSelectChange}
                 >
                     {
@@ -35,11 +37,6 @@ const VisualizationControls = ({ feature, setFeature }) => {
             </div>
         </div>
     );
-};
-
-VisualizationControls.propTypes = {
-    feature: PropTypes.string,
-    setFeature: PropTypes.func
 };
 
 export default VisualizationControls;
