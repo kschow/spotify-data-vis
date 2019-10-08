@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { VictoryBar, VictoryChart, VictoryLabel } from 'victory';
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryLabel } from 'victory';
 import Loading from '../../Common/Loading/Loading';
 import { useTrackInfo } from '../TrackInfo/TrackInfoContext';
 import { countFeatures, AUDIO_FEATURES } from './BarChartBuckets';
@@ -39,11 +39,15 @@ const VisualizationArea = () => {
                                 width={700}
                                 height={350}
                             >
-                                <VictoryLabel
-                                    text={labelText}
-                                    x={350}
-                                    y={340}
-                                    textAnchor={'middle'}
+                                <VictoryAxis
+                                    label={labelText}
+                                    axisLabelComponent={<VictoryLabel y={335} />}
+                                />
+                                <VictoryAxis
+                                    dependentAxis
+                                    tickFormat={(t) => `${Math.round(t)}`}
+                                    label="Count"
+                                    axisLabelComponent={<VictoryLabel x={20} />}
                                 />
                                 <VictoryBar
                                     data={barchartData}

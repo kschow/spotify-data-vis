@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSearch } from './Service/SearchContext';
+import '../../Common/Styles/Controls.scss';
 
 const SearchControls = () => {
     const [searchText, setSearchText] = useState('');
@@ -20,7 +21,7 @@ const SearchControls = () => {
     };
 
     return (
-        <div className="SearchControls">
+        <div className="SearchControls ControlBox">
             <form onSubmit={onSubmit}>
                 <input
                     type="text"

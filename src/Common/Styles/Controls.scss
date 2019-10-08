@@ -1,0 +1,10 @@
+.ControlBox {
+  margin: .5rem auto;
+  width: fit-content;
+  border: 2px solid #666;
+
+  :nth-child(n) {
+    font-size: 1.25rem;
+    margin: .25rem;
+  }
+}
