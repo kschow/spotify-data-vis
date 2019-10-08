@@ -1,4 +1,4 @@
-import { cloneDeep, isNil } from 'lodash';
+import { cloneDeep, isEmpty, isNil } from 'lodash';
 
 const NOT_AVAILABLE = 'N/A';
 
@@ -310,4 +310,24 @@ export const countFeatures = (tracks, feature) => {
             AUDIO_FEATURES[feature].reduceFunction,
             cloneDeep(AUDIO_FEATURES[feature].buckets)
         );
+};
+
+export const getFeatureLabelText = (bucket) => {
+    if (isNil(AUDIO_FEATURES[bucket])) {
+        return null;
+    }
+
+    const unitText = isEmpty(AUDIO_FEATURES[bucket].units) ?
+        '' :
+        `(${AUDIO_FEATURES[bucket].units})`;
+
+    return `${AUDIO_FEATURES[bucket].displayName} ${unitText}`;
+};
+
+export const getFeatureDomainPadding = (bucket) => {
+    if (isNil(AUDIO_FEATURES[bucket])) {
+        return null;
+    }
+
+    return AUDIO_FEATURES[bucket].chartDomainPadding;
 };

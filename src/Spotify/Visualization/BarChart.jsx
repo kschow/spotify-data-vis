@@ -1,14 +1,16 @@
-import React from 'react';
-import { AUDIO_FEATURES } from './Buckets';
 import PropTypes from 'prop-types';
-import { VictoryChart, VictoryAxis, VictoryLabel, VictoryBar } from 'victory';
+import React from 'react';
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel } from 'victory';
+import { getFeatureDomainPadding, getFeatureLabelText } from './Features';
 
 /* eslint-disable id-length */
-const BarChart = ({ bucket, labelText, barChartData }) => {
+const BarChart = ({ feature, barChartData }) => {
+    const labelText = getFeatureLabelText(feature);
+
     return (
         <div className="Chart" data-testid="bar-chart">
             <VictoryChart
-                domainPadding={{ x: AUDIO_FEATURES[bucket].chartDomainPadding }}
+                domainPadding={{ x: getFeatureDomainPadding(feature) }}
                 width={700}
                 height={350}
             >
@@ -33,8 +35,7 @@ const BarChart = ({ bucket, labelText, barChartData }) => {
 };
 
 BarChart.propTypes = {
-    bucket: PropTypes.string,
-    labelText: PropTypes.string,
+    feature: PropTypes.string,
     barChartData: PropTypes.arrayOf(PropTypes.object)
 };
 

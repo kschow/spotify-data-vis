@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AUDIO_FEATURES } from './Buckets';
+import { AUDIO_FEATURES } from './Features';
 import '../../Common/Styles/Controls.scss';
 
-const VisualizationControls = ({ bucket, setBucket }) => {
+/* eslint-disable id-length */
+const VisualizationControls = ({ feature, setFeature }) => {
     const handleSelectChange = (event) => {
-        setBucket(event.target.value);
+        setFeature(event.target.value);
     };
 
     return (
@@ -14,12 +15,12 @@ const VisualizationControls = ({ bucket, setBucket }) => {
                 <label htmlFor="feature">Feature:</label>
                 <select
                     id="feature"
-                    value={bucket}
+                    value={feature}
                     onChange={handleSelectChange}
                 >
                     {
-                        Object.entries(AUDIO_FEATURES).map((feature) => {
-                            const [key, value] = feature;
+                        Object.entries(AUDIO_FEATURES).map((f) => {
+                            const [key, value] = f;
                             return (
                                 <option
                                     key={key}
@@ -37,8 +38,8 @@ const VisualizationControls = ({ bucket, setBucket }) => {
 };
 
 VisualizationControls.propTypes = {
-    bucket: PropTypes.string,
-    setBucket: PropTypes.func
+    feature: PropTypes.string,
+    setFeature: PropTypes.func
 };
 
 export default VisualizationControls;
