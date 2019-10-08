@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useSearch } from './Service/SearchContext';
 import '../../Common/Styles/Controls.scss';
+import { useSearch } from './Service/SearchContext';
 
 const SearchControls = () => {
     const [searchText, setSearchText] = useState('');

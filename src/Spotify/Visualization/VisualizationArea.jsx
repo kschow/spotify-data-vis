@@ -2,8 +2,8 @@ import React from 'react';
 import Loading from '../../Common/Loading/Loading';
 import { useTrackInfo } from '../TrackInfo/TrackInfoContext';
 import BarChart from './Charts/BarChart';
-import './VisualizationArea.scss';
 import ScatterPlot from './Charts/ScatterPlot';
+import './VisualizationArea.scss';
 import VisualizationControls from './VisualizationControls/VisualizationControls';
 import { useVisualizationControls } from './VisualizationControls/VisualizationControlsContext';
 
