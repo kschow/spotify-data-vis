@@ -5,6 +5,9 @@ import Pane from './Spotify/Pane';
 const App = () => {
     return (
         <div className="App">
+            <div className="Header">
+                Spotify Data Visualizer
+            </div>
             <Pane />
         </div>
     );

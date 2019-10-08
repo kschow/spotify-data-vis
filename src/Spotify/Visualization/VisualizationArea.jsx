@@ -33,7 +33,7 @@ const VisualizationArea = () => {
                             bucket={bucket}
                             setBucket={setBucket}
                         />
-                        <div className="chart" data-testid="chart">
+                        <div className="Chart" data-testid="chart">
                             <VictoryChart
                                 domainPadding={{ x: AUDIO_FEATURES[bucket].chartDomainPadding }}
                                 width={700}
