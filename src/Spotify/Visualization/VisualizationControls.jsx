@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AUDIO_FEATURES } from './BarChartBuckets';
+import { AUDIO_FEATURES } from './Buckets';
 import '../../Common/Styles/Controls.scss';
 
 const VisualizationControls = ({ bucket, setBucket }) => {

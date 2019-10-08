@@ -64,7 +64,7 @@ it('Clicking a search result with tracks switches view to visualization ' +
 
     fireEvent.click(result);
 
-    await expect(findByTestId('chart')).resolves.toBeTruthy();
+    await expect(findByTestId('bar-chart')).resolves.toBeTruthy();
     expect(queryByText('Test Artist 1')).toBeNull();
 
     expect(queryByText('Go back to search')).toBeTruthy();
