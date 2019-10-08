@@ -1,23 +1,29 @@
 import React from 'react';
 import Loading from '../../Common/Loading/Loading';
 import { useTrackInfo } from '../TrackInfo/TrackInfoContext';
-import BarChart from './BarChart';
+import BarChart from './Charts/BarChart';
 import './VisualizationArea.scss';
+import ScatterPlot from './Charts/ScatterPlot';
 import VisualizationControls from './VisualizationControls/VisualizationControls';
-import { VisualizationControlsProvider } from './VisualizationControls/VisualizationControlsContext';
+import { useVisualizationControls } from './VisualizationControls/VisualizationControlsContext';
 
 const VisualizationArea = () => {
     const { tracks, isLoading } = useTrackInfo();
+    const { chartType } = useVisualizationControls();
 
     return (
         <>
             {
                 isLoading ?
                     <Loading /> :
-                    <VisualizationControlsProvider>
+                        <>
                         <VisualizationControls />
-                        <BarChart tracks={tracks} />
-                    </VisualizationControlsProvider>
+                        {
+                            chartType === 'bar-chart' ?
+                                <BarChart tracks={tracks} /> :
+                                <ScatterPlot tracks={tracks} />
+                        }
+                        </>
             }
         </>
     );

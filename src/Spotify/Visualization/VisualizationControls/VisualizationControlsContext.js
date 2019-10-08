@@ -4,12 +4,19 @@ import React, { createContext, useContext, useState } from 'react';
 const VisualizationControlsContext = createContext(undefined);
 
 const VisualizationControlsProvider = (props) => {
-    const [barChartFeature, setBarChartFeature] = useState('loudness');
+    const [chartType, setChartType] = useState('bar-chart');
+    const [visualizationFeatures, setVisualizationFeatures] = useState({
+        barChartFeature: 'loudness',
+        scatterPlotXFeature: 'loudness',
+        scatterPlotYFeature: 'energy'
+    });
 
     return <VisualizationControlsContext.Provider value={
         {
-            barChartFeature,
-            setBarChartFeature
+            chartType,
+            setChartType,
+            visualizationFeatures,
+            setVisualizationFeatures
         }
     } {...props} />;
 };

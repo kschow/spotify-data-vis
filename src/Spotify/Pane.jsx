@@ -4,6 +4,7 @@ import SearchArea from './Search/SearchArea';
 import { SearchProvider } from './Search/Service/SearchContext';
 import { TrackInfoProvider, useTrackInfo } from './TrackInfo/TrackInfoContext';
 import VisualizationArea from './Visualization/VisualizationArea';
+import { VisualizationControlsProvider } from './Visualization/VisualizationControls/VisualizationControlsContext';
 
 const Pane = () => {
     return (
@@ -56,7 +57,7 @@ const SearchAndVisualizationArea = () => {
 
     const displayVisualizationArea = () => {
         return (
-            <>
+            <VisualizationControlsProvider>
                 <VisualizationArea />
                 {
                     isLoading ?
@@ -65,7 +66,7 @@ const SearchAndVisualizationArea = () => {
                             Go back to search
                         </button>
                 }
-            </>
+            </VisualizationControlsProvider>
         );
     };
 
