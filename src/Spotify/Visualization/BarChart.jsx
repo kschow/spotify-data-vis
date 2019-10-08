@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel } from 'victory';
-import { getFeatureDomainPadding, getFeatureLabelText } from './Features';
+import { countFeatures, getFeatureDomainPadding, getFeatureLabelText } from './Features';
 
 /* eslint-disable id-length */
-const BarChart = ({ feature, barChartData }) => {
+const BarChart = ({ tracks, feature }) => {
     const labelText = getFeatureLabelText(feature);
+    const barChartData = countFeatures(tracks, feature);
 
     return (
         <div className="Chart" data-testid="bar-chart">
@@ -35,8 +36,8 @@ const BarChart = ({ feature, barChartData }) => {
 };
 
 BarChart.propTypes = {
-    feature: PropTypes.string,
-    barChartData: PropTypes.arrayOf(PropTypes.object)
+    tracks: PropTypes.object,
+    feature: PropTypes.string
 };
 
 export default BarChart;
