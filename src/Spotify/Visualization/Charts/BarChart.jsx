@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel } from 'victory';
-import { countFeatures, getFeatureDomainPadding, getFeatureLabelText } from '../Features';
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryTooltip } from 'victory';
+import { countFeature, getFeatureDomainPadding, getFeatureLabelText } from '../Features';
 import { useVisualizationControls } from '../VisualizationControls/VisualizationControlsContext';
 
 /* eslint-disable id-length */
@@ -10,7 +10,7 @@ const BarChart = ({ tracks }) => {
     const { barChartFeature } = visualizationFeatures;
 
     const labelText = getFeatureLabelText(barChartFeature);
-    const barChartData = countFeatures(tracks, barChartFeature);
+    const barChartData = countFeature(tracks, barChartFeature);
 
     return (
         <div className="Chart" data-testid="bar-chart">
@@ -18,6 +18,10 @@ const BarChart = ({ tracks }) => {
                 domainPadding={{ x: getFeatureDomainPadding(barChartFeature) }}
                 width={700}
                 height={350}
+                animate={{
+                    duration: 350,
+                    easing: 'sinOut'
+                }}
             >
                 <VictoryAxis
                     label={labelText}
@@ -27,12 +31,14 @@ const BarChart = ({ tracks }) => {
                     dependentAxis
                     tickFormat={(t) => `${Math.round(t)}`}
                     label="Count"
-                    axisLabelComponent={<VictoryLabel x={20} />}
+                    axisLabelComponent={<VictoryLabel x={15} />}
                 />
                 <VictoryBar
                     data={barChartData}
                     x="display"
                     y="count"
+                    labels={({ datum }) => `count: ${datum.count}`}
+                    labelComponent={<VictoryTooltip />}
                 />
             </VictoryChart>
         </div>

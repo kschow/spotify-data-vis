@@ -287,7 +287,7 @@ export const AUDIO_FEATURES = {
     },
     timeSignature: {
         displayName: 'Time Signature',
-        units: 'x/4',
+        units: '',
         mapFunction: (data) => timeSignatureFunction(data),
         reduceFunction: simpleReduceFunction,
         buckets: TIME_BUCKETS,
@@ -303,7 +303,7 @@ export const AUDIO_FEATURES = {
     }
 };
 
-export const countFeatures = (tracks, feature) => {
+export const countFeature = (tracks, feature) => {
     return Object.values(tracks)
         .map(AUDIO_FEATURES[feature].mapFunction)
         .reduce(
@@ -322,6 +322,18 @@ export const getFeatureLabelText = (bucket) => {
         `(${AUDIO_FEATURES[bucket].units})`;
 
     return `${AUDIO_FEATURES[bucket].displayName} ${unitText}`;
+};
+
+export const getFeatureTooltipText = (bucket, value) => {
+    if (isNil(AUDIO_FEATURES[bucket])) {
+        return null;
+    }
+
+    const unitText = isEmpty(AUDIO_FEATURES[bucket].units) ?
+        '' :
+        `${AUDIO_FEATURES[bucket].units}`;
+
+    return `${value} ${unitText}`;
 };
 
 export const getFeatureDomainPadding = (bucket) => {

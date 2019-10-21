@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { VictoryAxis, VictoryChart, VictoryLabel, VictoryScatter } from 'victory';
-import { getFeatureLabelText } from '../Features';
+import { VictoryAxis, VictoryChart, VictoryLabel, VictoryScatter, VictoryTooltip } from 'victory';
+import { getFeatureLabelText, getFeatureTooltipText } from '../Features';
 import { useVisualizationControls } from '../VisualizationControls/VisualizationControlsContext';
 
 /* eslint-disable id-length */
@@ -14,6 +14,7 @@ const ScatterPlot = ({ tracks }) => {
 
     const scatterPlotData = Object.values(tracks).map((track) => {
         return {
+            name: track.name,
             x: track[scatterPlotXFeature],
             y: track[scatterPlotYFeature]
         };
@@ -24,6 +25,10 @@ const ScatterPlot = ({ tracks }) => {
             <VictoryChart
                 width={700}
                 height={350}
+                animate={{
+                    duration: 350,
+                    easing: 'sinOut'
+                }}
             >
                 <VictoryAxis
                     label={xAxisLabelText}
@@ -34,9 +39,16 @@ const ScatterPlot = ({ tracks }) => {
                     dependentAxis
                     label={yAxisLabelText}
                     orientation="left"
-                    axisLabelComponent={<VictoryLabel x={20} />}
+                    axisLabelComponent={<VictoryLabel x={15} />}
                 />
-                <VictoryScatter data={scatterPlotData} />
+                <VictoryScatter
+                    data={scatterPlotData}
+                    labels={
+                        // eslint-disable-next-line max-len
+                        ({ datum }) => `Name: ${datum.name}\n${scatterPlotXFeature}: ${getFeatureTooltipText(scatterPlotXFeature, datum.x)}\n${scatterPlotYFeature}: ${getFeatureTooltipText(scatterPlotYFeature, datum.y)}`
+                    }
+                    labelComponent={<VictoryTooltip />}
+                />
             </VictoryChart>
         </div>
     );
