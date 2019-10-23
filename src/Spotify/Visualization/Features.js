@@ -93,10 +93,10 @@ const TIME_BUCKETS = [
 
 const MODE_BUCKETS = [{ count: 0, display: 'minor' }, { count: 0, display: 'major' }];
 
-const simpleMapFunction = (data, key) => data[key];
+const simpleBucketMapFunction = (data, key) => data[key];
 
 // fix issue with time signature and 0 index mismatch
-const timeSignatureFunction = (data) => {
+const timeSignatureBucketFunction = (data) => {
     if (isNil(data.timeSignature) || data.timeSignature < 1) {
         return NOT_AVAILABLE;
     }
@@ -104,20 +104,20 @@ const timeSignatureFunction = (data) => {
 };
 
 // this function looks to map the space from 0 to 1 into 10 equally sized buckets
-const zeroOneMapFunction = (data, key) => {
+const zeroOneBucketMapFunction = (data, key) => {
     return isNil(data[key]) ?
         NOT_AVAILABLE :
         Math.floor(data[key] * 10);
 };
 
 // this function looks to map the space from 0 to 100 into 10 equally sized buckets
-const zeroOneHundredMapFunction = (data, key) => {
+const zeroOneHundredBucketMapFunction = (data, key) => {
     return isNil(data[key]) ?
         NOT_AVAILABLE :
         Math.floor(data[key] / 10);
 };
 
-const loudnessMapFunction = (data) => {
+const loudnessBucketMapFunction = (data) => {
     const { loudness } = data;
     if (loudness < -35) {
         return 0;
@@ -149,7 +149,7 @@ const loudnessMapFunction = (data) => {
     return NOT_AVAILABLE;
 };
 
-const tempoMapFunction = (data) => {
+const tempoBucketMapFunction = (data) => {
     if (isNil(data.tempo)) {
         return NOT_AVAILABLE;
     }
@@ -160,7 +160,7 @@ const tempoMapFunction = (data) => {
 };
 
 // buckets for duration go in one minute intervals up to 6, everything 7 minutes+ is in the same bucket
-const durationMapFunction = (data) => {
+const durationBucketMapFunction = (data) => {
     if (isNil(data.durationMs)) {
         return NOT_AVAILABLE;
     }
@@ -180,124 +180,210 @@ const simpleReduceFunction = (data, key) => {
     return data;
 };
 
+const doNothingFunction = (data) => data;
+const fixedNumberDisplayFunction = (decimal, data) => data.toFixed(decimal);
+const threeDecimalDisplayFunction = (data) => fixedNumberDisplayFunction(3, data);
+const zeroDecimalDisplayFunction = (data) => fixedNumberDisplayFunction(0, data);
+const keyDisplayFunction = (data) => {
+    switch (data) {
+    case 0:
+        return 'C';
+    case 1:
+        return 'C#/Db';
+    case 2:
+        return 'D';
+    case 3:
+        return 'D#/Eb';
+    case 4:
+        return 'E';
+    case 5:
+        return 'F';
+    case 6:
+        return 'F#/Gb';
+    case 7:
+        return 'G';
+    case 8:
+        return 'G#/Ab';
+    case 9:
+        return 'A';
+    case 10:
+        return 'A#/Bb';
+    case 11:
+        return 'B';
+    default:
+        return 'N/A';
+    }
+};
+const modeDisplayFunction = (data) => {
+    switch (data) {
+    case 0:
+        return 'minor';
+    case 1:
+        return 'major';
+    default:
+        return 'N/A';
+    }
+};
+const durationDisplayFunction = (data) => {
+    return `${Math.floor(data)}:${(data % 1 * 60).toFixed(0).padStart(2, '0')}`;
+};
+
 export const AUDIO_FEATURES = {
     loudness: {
         displayName: 'Loudness',
         units: 'dB',
-        mapFunction: loudnessMapFunction,
+        bucketMapFunction: loudnessBucketMapFunction,
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: (data) => `${threeDecimalDisplayFunction(data)} dB`,
         buckets: LOUDNESS_BUCKETS,
         chartDomainPadding: 20
     },
     energy: {
         displayName: 'Energy',
         units: '',
-        mapFunction: (data) => zeroOneMapFunction(data, 'energy'),
+        bucketMapFunction: (data) => zeroOneBucketMapFunction(data, 'energy'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: threeDecimalDisplayFunction,
         buckets: ZERO_ONE_BUCKETS,
         chartDomainPadding: 20
     },
     key: {
         displayName: 'Key',
         units: '',
-        mapFunction: (data) => simpleMapFunction(data, 'key'),
+        bucketMapFunction: (data) => simpleBucketMapFunction(data, 'key'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: keyDisplayFunction,
+        // eslint-disable-next-line array-element-newline
+        scatterTickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        scatterTickFormat: keyDisplayFunction,
         buckets: KEY_BUCKETS,
         chartDomainPadding: 20
     },
     mode: {
         displayName: 'Mode',
         units: '',
-        mapFunction: (data) => simpleMapFunction(data, 'mode'),
+        bucketMapFunction: (data) => simpleBucketMapFunction(data, 'mode'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: modeDisplayFunction,
+        scatterTickValues: [0, 1],
+        scatterTickFormat: modeDisplayFunction,
         buckets: MODE_BUCKETS,
-        chartDomainPadding: 100
+        chartDomainPadding: 200
     },
     acousticness: {
         displayName: 'Acousticness',
         units: '',
-        mapFunction: (data) => zeroOneMapFunction(data, 'acousticness'),
+        bucketMapFunction: (data) => zeroOneBucketMapFunction(data, 'acousticness'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: threeDecimalDisplayFunction,
         buckets: ZERO_ONE_BUCKETS,
         chartDomainPadding: 20
     },
     speechiness: {
         displayName: 'Speechiness',
         units: '',
-        mapFunction: (data) => zeroOneMapFunction(data, 'speechiness'),
+        bucketMapFunction: (data) => zeroOneBucketMapFunction(data, 'speechiness'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: threeDecimalDisplayFunction,
         buckets: ZERO_ONE_BUCKETS,
         chartDomainPadding: 20
     },
     instrumentalness: {
         displayName: 'Instrumentalness',
         units: '',
-        mapFunction: (data) => zeroOneMapFunction(data, 'instrumentalness'),
+        bucketMapFunction: (data) => zeroOneBucketMapFunction(data, 'instrumentalness'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: threeDecimalDisplayFunction,
         buckets: ZERO_ONE_BUCKETS,
         chartDomainPadding: 20
     },
     liveness: {
         displayName: 'Liveness',
         units: '',
-        mapFunction: (data) => zeroOneMapFunction(data, 'liveness'),
+        bucketMapFunction: (data) => zeroOneBucketMapFunction(data, 'liveness'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: threeDecimalDisplayFunction,
         buckets: ZERO_ONE_BUCKETS,
         chartDomainPadding: 20
     },
     valence: {
         displayName: 'Valence',
         units: '',
-        mapFunction: (data) => zeroOneMapFunction(data, 'valence'),
+        bucketMapFunction: (data) => zeroOneBucketMapFunction(data, 'valence'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: threeDecimalDisplayFunction,
         buckets: ZERO_ONE_BUCKETS,
         chartDomainPadding: 20
     },
     tempo: {
         displayName: 'Tempo',
         units: 'bpm',
-        mapFunction: tempoMapFunction,
+        bucketMapFunction: tempoBucketMapFunction,
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: (data) => `${zeroDecimalDisplayFunction(data)} bpm`,
         buckets: TEMPO_BUCKETS,
         chartDomainPadding: 20
     },
     danceability: {
         displayName: 'Danceability',
         units: '',
-        mapFunction: (data) => zeroOneMapFunction(data, 'danceability'),
+        bucketMapFunction: (data) => zeroOneBucketMapFunction(data, 'danceability'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: threeDecimalDisplayFunction,
         buckets: ZERO_ONE_BUCKETS,
         chartDomainPadding: 20
     },
     trackNumber: {
         displayName: 'Track Number',
         units: '',
-        mapFunction: (data) => simpleMapFunction(data, 'trackNumber'),
+        bucketMapFunction: (data) => simpleBucketMapFunction(data, 'trackNumber'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: threeDecimalDisplayFunction,
         buckets: [],
         chartDomainPadding: 20
     },
     durationMs: {
         displayName: 'Duration',
         units: 'minutes',
-        mapFunction: durationMapFunction,
+        bucketMapFunction: durationBucketMapFunction,
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: (data) => data / 60000,
+        tooltipDisplayFunction: durationDisplayFunction,
+        scatterTickFormat: zeroDecimalDisplayFunction,
         buckets: DURATION_BUCKETS,
         chartDomainPadding: 20
     },
     timeSignature: {
         displayName: 'Time Signature',
         units: '',
-        mapFunction: (data) => timeSignatureFunction(data),
+        bucketMapFunction: (data) => timeSignatureBucketFunction(data),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: zeroDecimalDisplayFunction,
+        // eslint-disable-next-line array-element-newline
+        scatterTickValues: [1, 2, 3, 4, 5, 6, 7],
         buckets: TIME_BUCKETS,
         chartDomainPadding: 20
     },
     popularity: {
         displayName: 'Popularity',
         units: '',
-        mapFunction: (data) => zeroOneHundredMapFunction(data, 'popularity'),
+        bucketMapFunction: (data) => zeroOneHundredBucketMapFunction(data, 'popularity'),
         reduceFunction: simpleReduceFunction,
+        scatterMapFunction: doNothingFunction,
+        tooltipDisplayFunction: zeroDecimalDisplayFunction,
         buckets: POPULARITY_BUCKETS,
         chartDomainPadding: 20
     }
@@ -305,18 +391,18 @@ export const AUDIO_FEATURES = {
 
 export const countFeature = (tracks, feature) => {
     return Object.values(tracks)
-        .map(AUDIO_FEATURES[feature].mapFunction)
+        .map(AUDIO_FEATURES[feature].bucketMapFunction)
         .reduce(
             AUDIO_FEATURES[feature].reduceFunction,
             cloneDeep(AUDIO_FEATURES[feature].buckets)
         );
 };
 
-export const getFeatureLabelText = (bucket) => {
-    if (isNil(AUDIO_FEATURES[bucket])) {
-        return null;
-    }
+export const scatterFeature = (value, feature) => {
+    return AUDIO_FEATURES[feature].scatterMapFunction(value);
+};
 
+export const getFeatureLabelText = (bucket) => {
     const unitText = isEmpty(AUDIO_FEATURES[bucket].units) ?
         '' :
         `(${AUDIO_FEATURES[bucket].units})`;
@@ -324,22 +410,22 @@ export const getFeatureLabelText = (bucket) => {
     return `${AUDIO_FEATURES[bucket].displayName} ${unitText}`;
 };
 
-export const getFeatureTooltipText = (bucket, value) => {
-    if (isNil(AUDIO_FEATURES[bucket])) {
-        return null;
-    }
+export const getScatterTooltipText = (datum, scatterFeatureX, scatterFeatureY) => {
+    return `Name: ${datum.name}\n` +
+        `${AUDIO_FEATURES[scatterFeatureX].displayName}: ` +
+        `${AUDIO_FEATURES[scatterFeatureX].tooltipDisplayFunction(datum.x)}\n` +
+        `${AUDIO_FEATURES[scatterFeatureY].displayName}: ` +
+        `${AUDIO_FEATURES[scatterFeatureY].tooltipDisplayFunction(datum.y)}`;
+};
 
-    const unitText = isEmpty(AUDIO_FEATURES[bucket].units) ?
-        '' :
-        `${AUDIO_FEATURES[bucket].units}`;
+export const getScatterTickValues = (feature) => {
+    return AUDIO_FEATURES[feature].scatterTickValues;
+};
 
-    return `${value} ${unitText}`;
+export const getScatterTickFormat = (feature) => {
+    return AUDIO_FEATURES[feature].scatterTickFormat;
 };
 
 export const getFeatureDomainPadding = (bucket) => {
-    if (isNil(AUDIO_FEATURES[bucket])) {
-        return null;
-    }
-
     return AUDIO_FEATURES[bucket].chartDomainPadding;
 };

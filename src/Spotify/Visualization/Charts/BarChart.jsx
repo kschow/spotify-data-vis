@@ -38,7 +38,7 @@ const BarChart = ({ tracks }) => {
                     x="display"
                     y="count"
                     labels={({ datum }) => `count: ${datum.count}`}
-                    labelComponent={<VictoryTooltip />}
+                    labelComponent={<VictoryTooltip constrainToVisibleArea />}
                 />
             </VictoryChart>
         </div>
