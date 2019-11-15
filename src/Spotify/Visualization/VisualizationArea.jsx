@@ -17,12 +17,12 @@ const VisualizationArea = () => {
                 isLoading ?
                     <Loading /> :
                         <>
-                        <VisualizationControls />
-                        {
-                            chartType === 'bar-chart' ?
-                                <BarChart tracks={tracks} /> :
-                                <ScatterPlot tracks={tracks} />
-                        }
+                            <VisualizationControls />
+                            {
+                                chartType === 'bar-chart' ?
+                                    <BarChart tracks={tracks} /> :
+                                    <ScatterPlot tracks={tracks} />
+                            }
                         </>
             }
         </>
