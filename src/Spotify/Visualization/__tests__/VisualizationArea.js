@@ -3,7 +3,7 @@ import React from 'react';
 import { TrackInfoProvider } from '../../TrackInfo/TrackInfoContext';
 import { TrackInfoService } from '../../TrackInfo/TrackInfoService';
 import VisualizationArea from '../VisualizationArea';
-import { VisualizationControlsProvider } from '../VisualizationControls/VisualizationControlsContext';
+import { VisualizationControlsProvider } from '../../../Controls/VisualizationControls/VisualizationControlsContext';
 
 jest.mock('../../TrackInfo/TrackInfoService');
 

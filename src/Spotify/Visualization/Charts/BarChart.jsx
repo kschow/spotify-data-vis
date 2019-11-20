@@ -1,8 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryTooltip } from 'victory';
-import { countFeature, getFeatureDomainPadding, getFeatureLabelText } from '../Features';
-import { useVisualizationControls } from '../VisualizationControls/VisualizationControlsContext';
+import {
+    countFeature,
+    getFeatureDomainPadding,
+    getFeatureLabelText
+} from '../../../Controls/VisualizationControls/Features';
+import { useVisualizationControls } from '../../../Controls/VisualizationControls/VisualizationControlsContext';
 
 /* eslint-disable id-length */
 const BarChart = ({ tracks }) => {

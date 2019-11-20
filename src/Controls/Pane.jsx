@@ -1,10 +1,10 @@
 import { isEmpty } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
-import SearchArea from './Search/SearchArea';
-import { SearchProvider } from './Search/Service/SearchContext';
-import { TrackInfoProvider, useTrackInfo } from './TrackInfo/TrackInfoContext';
-import VisualizationArea from './Visualization/VisualizationArea';
-import { VisualizationControlsProvider } from './Visualization/VisualizationControls/VisualizationControlsContext';
+import SearchArea from '../Spotify/Search/SearchArea';
+import { SearchProvider } from '../Spotify/Search/Service/SearchContext';
+import { TrackInfoProvider, useTrackInfo } from '../Spotify/TrackInfo/TrackInfoContext';
+import VisualizationArea from '../Spotify/Visualization/VisualizationArea';
+import { VisualizationControlsProvider } from './VisualizationControls/VisualizationControlsContext';
 
 const Pane = () => {
     return (

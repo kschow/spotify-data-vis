@@ -1,11 +1,11 @@
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import Pane from '../Pane';
-import { SearchService } from '../Search/Service/SearchService';
-import { TrackInfoService } from '../TrackInfo/TrackInfoService';
+import { SearchService } from '../../Spotify/Search/Service/SearchService';
+import { TrackInfoService } from '../../Spotify/TrackInfo/TrackInfoService';
 
-jest.mock('../Search/Service/SearchService');
-jest.mock('../TrackInfo/TrackInfoService');
+jest.mock('../../Spotify/Search/Service/SearchService');
+jest.mock('../../Spotify/TrackInfo/TrackInfoService');
 
 afterEach(() => {
     jest.resetAllMocks();

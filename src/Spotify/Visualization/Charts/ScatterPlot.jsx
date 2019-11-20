@@ -7,8 +7,8 @@ import {
     getScatterTickValues,
     getScatterTooltipText,
     scatterFeature
-} from '../Features';
-import { useVisualizationControls } from '../VisualizationControls/VisualizationControlsContext';
+} from '../../../Controls/VisualizationControls/Features';
+import { useVisualizationControls } from '../../../Controls/VisualizationControls/VisualizationControlsContext';
 
 /* eslint-disable id-length */
 const ScatterPlot = ({ tracks }) => {

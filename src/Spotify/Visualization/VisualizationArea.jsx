@@ -4,8 +4,8 @@ import { useTrackInfo } from '../TrackInfo/TrackInfoContext';
 import BarChart from './Charts/BarChart';
 import ScatterPlot from './Charts/ScatterPlot';
 import './VisualizationArea.scss';
-import VisualizationControls from './VisualizationControls/VisualizationControls';
-import { useVisualizationControls } from './VisualizationControls/VisualizationControlsContext';
+import VisualizationControls from '../../Controls/VisualizationControls/VisualizationControls';
+import { useVisualizationControls } from '../../Controls/VisualizationControls/VisualizationControlsContext';
 
 const VisualizationArea = () => {
     const { tracks, isLoading } = useTrackInfo();

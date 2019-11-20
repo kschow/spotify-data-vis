@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import '../../../Common/Styles/Controls.scss';
-import { AUDIO_FEATURES } from '../Features';
+import '../../Common/Styles/Controls.scss';
+import { AUDIO_FEATURES } from './Features';
 import './VisualizationControls.scss';
 import { useVisualizationControls } from './VisualizationControlsContext';
 
