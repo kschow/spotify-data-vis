@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.scss';
-import Pane from './Controls/Pane';
+import Window from './Controls/Window';
 
 const App = () => {
     return (
@@ -8,7 +8,7 @@ const App = () => {
             <div className="Header">
                 Spotify Data Visualizer
             </div>
-            <Pane />
+            <Window />
         </div>
     );
 };

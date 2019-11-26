@@ -35,7 +35,7 @@ const SearchControls = () => {
                     <option value="artist">Artist</option>
                     <option value="playlist">Playlist</option>
                 </select>
-                <button>Search</button>
+                <button className="Button">Search</button>
             </form>
         </div>
     );

@@ -1,0 +1,27 @@
+.Window {
+  height: 89.5vh;
+
+  &.Grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    justify-items: center;
+
+    &.Two {
+      grid-template-rows: auto 3rem;
+
+      .AddComparison {
+        grid-column-end: span 2;
+      }
+    }
+
+    .AddComparison {
+      margin-top: 0;
+    }
+  }
+
+  .AddComparison {
+    margin-top: 2rem;
+    font-size: 1.5rem;
+  }
+}

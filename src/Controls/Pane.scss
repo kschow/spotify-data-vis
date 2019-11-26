@@ -1,0 +1,13 @@
+.Pane {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+
+  .DeleteButton {
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: darkred;
+  }
+}

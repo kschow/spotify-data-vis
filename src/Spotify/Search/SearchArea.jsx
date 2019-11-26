@@ -9,7 +9,7 @@ const SearchArea = () => {
     const { errorMessage, isLoading } = useSearch();
 
     return (
-        <div>
+        <>
             <SearchControls />
             {
                 errorMessage === '' ?
@@ -22,7 +22,7 @@ const SearchArea = () => {
                     null
             }
             <SearchResults />
-        </div>
+        </>
     );
 };
 

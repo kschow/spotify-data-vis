@@ -3,6 +3,7 @@ import React from 'react';
 import Pane from '../Pane';
 import { SearchService } from '../../Spotify/Search/Service/SearchService';
 import { TrackInfoService } from '../../Spotify/TrackInfo/TrackInfoService';
+import { VisualizationControlsProvider } from '../VisualizationControls/VisualizationControlsContext';
 
 jest.mock('../../Spotify/Search/Service/SearchService');
 jest.mock('../../Spotify/TrackInfo/TrackInfoService');
@@ -50,7 +51,11 @@ it('Clicking a search result with tracks switches view to visualization ' +
         };
     TrackInfoService.getArtistTracks.mockResolvedValue(trackInfo);
 
-    const { getByPlaceholderText, getByText, queryByText, findByText, findByTestId } = render(<Pane />);
+    const component =
+        <VisualizationControlsProvider>
+            <Pane/>
+        </VisualizationControlsProvider>;
+    const { getByPlaceholderText, getByText, queryByText, findByText, findByTestId } = render(component);
 
     const searchBox = getByPlaceholderText('Search by artist');
     const submitButton = getByText('Search');
@@ -64,7 +69,9 @@ it('Clicking a search result with tracks switches view to visualization ' +
 
     fireEvent.click(result);
 
-    await expect(findByTestId('bar-chart')).resolves.toBeTruthy();
+    await expect(findByTestId('bar-chart'))
+        .resolves
+        .toBeTruthy();
     expect(queryByText('Test Artist 1')).toBeNull();
 
     expect(queryByText('Go back to search')).toBeTruthy();

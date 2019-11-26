@@ -1,24 +1,30 @@
 import { isEmpty } from 'lodash';
+import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import SearchArea from '../Spotify/Search/SearchArea';
 import { SearchProvider } from '../Spotify/Search/Service/SearchContext';
 import { TrackInfoProvider, useTrackInfo } from '../Spotify/TrackInfo/TrackInfoContext';
 import VisualizationArea from '../Spotify/Visualization/VisualizationArea';
-import { VisualizationControlsProvider } from './VisualizationControls/VisualizationControlsContext';
+import './Pane.scss';
 
-const Pane = () => {
+const Pane = ({ testId, deletePane }) => {
     return (
-        <>
+        <div className="Pane" data-testid={testId}>
             <SearchProvider>
                 <TrackInfoProvider>
-                    <SearchAndVisualizationArea />
+                    <SearchAndVisualizationArea testId={testId} deletePane={deletePane}/>
                 </TrackInfoProvider>
             </SearchProvider>
-        </>
+        </div>
     );
 };
 
-const SearchAndVisualizationArea = () => {
+Pane.propTypes = {
+    testId: PropTypes.number,
+    deletePane: PropTypes.func
+};
+
+const SearchAndVisualizationArea = ({ testId, deletePane }) => {
     // true means show search area, false means show visualization area
     const [searchAndVisualization, setSearchAndVisualization] = useState(true);
     const { tracks, isLoading } = useTrackInfo();
@@ -42,7 +48,7 @@ const SearchAndVisualizationArea = () => {
 
     const displaySearchArea = () => {
         return (
-            <>
+            <div>
                 <SearchArea />
                 {
                     isEmpty(tracks) ?
@@ -51,13 +57,13 @@ const SearchAndVisualizationArea = () => {
                             Show visualization
                         </button>
                 }
-            </>
+            </div>
         );
     };
 
     const displayVisualizationArea = () => {
         return (
-            <VisualizationControlsProvider>
+            <div>
                 <VisualizationArea />
                 {
                     isLoading ?
@@ -66,19 +72,35 @@ const SearchAndVisualizationArea = () => {
                             Go back to search
                         </button>
                 }
-            </VisualizationControlsProvider>
+            </div>
         );
     };
 
     return (
-        <div className="Pane">
+        <>
             {
                 searchAndVisualization ?
                     displaySearchArea() :
                     displayVisualizationArea()
             }
-        </div>
+            {
+                isLoading ?
+                    null :
+                    <button
+                        className="DeleteButton"
+                        onClick={deletePane}
+                        title="Delete"
+                        data-testid={`delete-${testId}`}>
+                        X
+                    </button>
+            }
+        </>
     );
+};
+
+SearchAndVisualizationArea.propTypes = {
+    testId: PropTypes.number,
+    deletePane: PropTypes.func
 };
 
 export default Pane;
