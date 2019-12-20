@@ -67,6 +67,7 @@
         "max-lines-per-function": "off",
         "object-property-newline": [2, {"allowAllPropertiesOnSameLine": true}],
         "max-lines": "off",
-        "no-plusplus": "off"
+        "no-plusplus": "off",
+        "no-negated-condition": "off"
     }
 }

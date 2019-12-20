@@ -1,7 +1,7 @@
 .ControlBox {
   display: flex;
   margin: .5rem auto;
-  width: fit-content;
+  width: max-content;
   border: 2px solid #666;
 
   :nth-child(n) {

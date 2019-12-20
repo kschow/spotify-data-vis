@@ -6,11 +6,15 @@ import SearchResults from './SearchResults';
 import { useSearch } from './Service/SearchContext';
 
 const SearchArea = () => {
-    const { errorMessage, isLoading } = useSearch();
+    const { errorMessage, isSearchBox, isLoading } = useSearch();
 
     return (
         <>
-            <SearchControls />
+            {
+                isSearchBox ?
+                    <SearchControls /> :
+                    null
+            }
             {
                 errorMessage === '' ?
                     null :
@@ -21,7 +25,11 @@ const SearchArea = () => {
                     <Loading /> :
                     null
             }
-            <SearchResults />
+            {
+                isSearchBox ?
+                    null :
+                    <SearchResults />
+            }
         </>
     );
 };

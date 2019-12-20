@@ -2,17 +2,36 @@ import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import SearchArea from '../Spotify/Search/SearchArea';
-import { SearchProvider } from '../Spotify/Search/Service/SearchContext';
+import { SearchProvider, useSearch } from '../Spotify/Search/Service/SearchContext';
 import { TrackInfoProvider, useTrackInfo } from '../Spotify/TrackInfo/TrackInfoContext';
 import VisualizationArea from '../Spotify/Visualization/VisualizationArea';
 import './Pane.scss';
 
-const Pane = ({ testId, deletePane }) => {
+const paneIndexCss = (index, numPanes) => {
+    if (numPanes === 1) {
+        return ' OnePane';
+    }
+
+    if (index === 0) {
+        return ' One';
+    } else if (index === 1) {
+        return ' Two';
+    } else if (index === 2) {
+        return ' Three';
+    } else if (index === 3) {
+        return ' Four';
+    }
+    return null;
+};
+
+const Pane = ({ testId, deletePane, numPanes, index }) => {
+    const onePane = numPanes === 1;
+
     return (
-        <div className="Pane" data-testid={testId}>
+        <div className={`Pane${paneIndexCss(index, numPanes)}`} data-testid={testId}>
             <SearchProvider>
                 <TrackInfoProvider>
-                    <SearchAndVisualizationArea testId={testId} deletePane={deletePane}/>
+                    <SearchAndVisualizationArea testId={testId} deletePane={deletePane} onePane={onePane} />
                 </TrackInfoProvider>
             </SearchProvider>
         </div>
@@ -21,17 +40,30 @@ const Pane = ({ testId, deletePane }) => {
 
 Pane.propTypes = {
     testId: PropTypes.number,
-    deletePane: PropTypes.func
+    deletePane: PropTypes.func,
+    numPanes: PropTypes.number,
+    index: PropTypes.number
 };
 
-const SearchAndVisualizationArea = ({ testId, deletePane }) => {
+const SearchAndVisualizationArea = ({ testId, deletePane, onePane }) => {
     // true means show search area, false means show visualization area
     const [searchAndVisualization, setSearchAndVisualization] = useState(true);
     const { tracks, isLoading } = useTrackInfo();
+    const { isSearchBox, searchResults, goToSearch, goToResults } = useSearch();
 
     const toggleSearchAndVisualization = useCallback(() => {
         setSearchAndVisualization(!searchAndVisualization);
     }, [searchAndVisualization]);
+
+    const toggleToSearch = useCallback(() => {
+        toggleSearchAndVisualization();
+        goToSearch();
+    }, [toggleSearchAndVisualization, goToSearch]);
+
+    const toggleToResults = useCallback(() => {
+        toggleSearchAndVisualization();
+        goToResults();
+    }, [toggleSearchAndVisualization, goToResults]);
 
     useEffect(
         () => {
@@ -48,30 +80,53 @@ const SearchAndVisualizationArea = ({ testId, deletePane }) => {
 
     const displaySearchArea = () => {
         return (
-            <div>
+            <div className="SearchArea">
                 <SearchArea />
-                {
-                    isEmpty(tracks) ?
-                        null :
-                        <button className="link-button" onClick={toggleSearchAndVisualization}>
-                            Show visualization
-                        </button>
-                }
+                <div className="Controls">
+                    {
+                        isSearchBox && !isEmpty(searchResults) ?
+                            <button className="link-button" onClick={goToResults}>
+                                Show results
+                            </button> :
+                            null
+                    }
+                    {
+                        !isSearchBox ?
+                            <button className="link-button" onClick={goToSearch}>
+                                Go back to search
+                            </button> :
+                            null
+                    }
+                    {
+                        isEmpty(tracks) ?
+                            null :
+                            <button className="link-button" onClick={toggleSearchAndVisualization}>
+                                Show visualization
+                            </button>
+                    }
+                </div>
             </div>
         );
     };
 
     const displayVisualizationArea = () => {
         return (
-            <div>
+            <div className="VisualizationArea">
                 <VisualizationArea />
-                {
-                    isLoading ?
-                        null :
-                        <button className="link-button" onClick={toggleSearchAndVisualization}>
-                            Go back to search
-                        </button>
-                }
+                <div className="Controls">
+                    {
+                        isLoading ?
+                            null :
+                            <>
+                                <button className="link-button" onClick={toggleToSearch}>
+                                    Go back to search
+                                </button>
+                                <button className="link-button" onClick={toggleToResults}>
+                                    Show results
+                                </button>
+                            </>
+                    }
+                </div>
             </div>
         );
     };
@@ -84,7 +139,7 @@ const SearchAndVisualizationArea = ({ testId, deletePane }) => {
                     displayVisualizationArea()
             }
             {
-                isLoading ?
+                isLoading || onePane ?
                     null :
                     <button
                         className="DeleteButton"
@@ -100,7 +155,8 @@ const SearchAndVisualizationArea = ({ testId, deletePane }) => {
 
 SearchAndVisualizationArea.propTypes = {
     testId: PropTypes.number,
-    deletePane: PropTypes.func
+    deletePane: PropTypes.func,
+    onePane: PropTypes.bool
 };
 
 export default Pane;

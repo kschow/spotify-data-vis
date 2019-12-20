@@ -128,7 +128,7 @@ it('searching for a playlist that returns results shows results', async () => {
     await expect(findByText('ACL 2019')).resolves.toBeTruthy();
 });
 
-it('shows loading while waiting for results', async () => {
+it('shows loading while waiting for results and disables the search box', async () => {
     // eslint-disable-next-line no-empty-function
     SearchService.searchArtist.mockReturnValue(new Promise(() => {}));
 
@@ -152,5 +152,6 @@ it('shows loading while waiting for results', async () => {
     fireEvent.click(submitButton);
 
     expect(queryByText('Please specify your search.')).toBeNull();
+    expect(queryByText('Search by artist')).toBeFalsy();
     await expect(findByTestId('Loading')).resolves.toBeTruthy();
 });

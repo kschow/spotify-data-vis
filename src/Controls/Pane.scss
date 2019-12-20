@@ -1,7 +1,42 @@
 .Pane {
   display: flex;
   justify-content: center;
-  align-items: baseline;
+  align-items: flex-start;
+  width: -webkit-fill-available;
+  width: -moz-available;
+  padding: 1em;
+
+  &.One {
+    border-bottom: 2px solid black;
+  }
+
+  &.Two {
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+  }
+
+  &.Three { }
+
+  &.Four {
+    border-left: 2px solid black;
+  }
+
+
+  &.OnePane {
+    .Controls {
+      width: 60%;
+      margin: auto;
+    }
+
+    .Chart {
+      width: 50%;
+    }
+  }
+
+  .SearchArea, .VisualizationArea {
+    width: -webkit-fill-available;
+    width: -moz-available;
+  }
 
   .DeleteButton {
     font-size: 2rem;
@@ -9,5 +44,11 @@
     border: none;
     cursor: pointer;
     color: darkred;
+    padding-top: .4em;
+  }
+
+  .Controls {
+    display: flex;
+    justify-content: space-around;
   }
 }

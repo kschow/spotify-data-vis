@@ -50,12 +50,16 @@ const Window = () => {
                             key={pane.testId}
                             testId={pane.testId}
                             deletePane={() => deletePane(index)}
+                            numPanes={panes.length}
+                            index={index}
                         />;
                     })
                 }
                 {
                     panes.length < 4 ?
-                        <button className="AddComparison Button" onClick={addPane}>Add Comparison</button> :
+                        <div className="AddComparison">
+                            <button className="Button" onClick={addPane}>Add Comparison</button>
+                        </div> :
                         null
                 }
             </div>

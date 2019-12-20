@@ -1,4 +1,5 @@
 /* eslint-disable no-undefined */
+import { isEmpty } from 'lodash';
 import React, { createContext, useContext, useState } from 'react';
 import { SearchService } from './SearchService';
 
@@ -9,6 +10,7 @@ const SearchProvider = (props) => {
     const [searchResults, setSearchResults] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isSearchBox, setIsSearchBox] = useState(true);
 
     const searchForX = (searchFunction, searchTerm) => {
         return searchFunction(searchTerm)
@@ -26,11 +28,22 @@ const SearchProvider = (props) => {
         setErrorMessage('');
         setIsLoading(true);
         setSearchResults([]);
+        setIsSearchBox(false);
 
         if (searchType === 'artist') {
             searchForX(SearchService.searchArtist, searchTerm);
         } else if (searchType === 'playlist') {
             searchForX(SearchService.searchPlaylist, searchTerm);
+        }
+    };
+
+    const goToSearch = () => {
+        setIsSearchBox(true);
+    };
+
+    const goToResults = () => {
+        if (!isEmpty(searchResults)) {
+            setIsSearchBox(false);
         }
     };
 
@@ -41,7 +54,10 @@ const SearchProvider = (props) => {
             errorMessage,
             isLoading,
             setSearchType,
-            search
+            isSearchBox,
+            search,
+            goToSearch,
+            goToResults
         }
     } {...props} />;
 };

@@ -14,7 +14,8 @@ afterEach(() => {
 
 it('Clicking a search result with tracks switches view to visualization ' +
     'with an option to switch the view back, ' +
-    'clicking that option switches the view back with existing search results', async () => {
+    'clicking that option switches the view back with existing search results. ' +
+    'There is also an option to go back to search in all states besides the search box.', async () => {
     const searchResults = [
         {
             'spotifyId': 'id 1',
@@ -67,6 +68,10 @@ it('Clicking a search result with tracks switches view to visualization ' +
     const result = await findByText('Test Artist 1');
     expect(result).toBeTruthy();
 
+    expect(queryByText('Go back to search')).toBeTruthy();
+    expect(queryByText('Show results')).toBeFalsy();
+    expect(queryByText('Show visualization')).toBeFalsy();
+
     fireEvent.click(result);
 
     await expect(findByTestId('bar-chart'))
@@ -75,9 +80,14 @@ it('Clicking a search result with tracks switches view to visualization ' +
     expect(queryByText('Test Artist 1')).toBeNull();
 
     expect(queryByText('Go back to search')).toBeTruthy();
-    const returnToSearch = getByText('Go back to search');
+    expect(queryByText('Show results')).toBeTruthy();
+    expect(queryByText('Show visualization')).toBeFalsy();
 
+    const returnToSearch = getByText('Go back to search');
     fireEvent.click(returnToSearch);
 
-    expect(queryByText('Test Artist 1')).toBeTruthy();
+    expect(queryByText('Test Artist 1')).toBeFalsy();
+    expect(queryByText('Go back to search')).toBeFalsy();
+    expect(queryByText('Show results')).toBeTruthy();
+    expect(queryByText('Show visualization')).toBeTruthy();
 });
