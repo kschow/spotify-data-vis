@@ -35,7 +35,7 @@ const VisualizationControls = () => {
     };
 
     return (
-        <div className="VisualizationControls ControlBox">
+        <div data-testid="VisualizationControls" className="VisualizationControls ControlBox">
             <div className="Selector">
                 <label htmlFor="chart-type">Chart Type:</label>
                 <select

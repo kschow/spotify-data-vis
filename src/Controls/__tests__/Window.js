@@ -1,6 +1,9 @@
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
+import { SearchService } from '../../Spotify/Search/Service/SearchService';
+import { TrackInfoService } from '../../Spotify/TrackInfo/TrackInfoService';
 import Window from '../Window';
+import { testSearchResults, testTrackInfo } from '../TestData/TestData';
 
 jest.mock('../../Spotify/Search/Service/SearchService');
 jest.mock('../../Spotify/TrackInfo/TrackInfoService');
@@ -32,9 +35,40 @@ it('shows one pane by default, allows up to four panes to be created, deleting p
     expect(queryByText('Add Comparison')).toBeTruthy();
 });
 
-/*
- * todo
- * it('displays VisualizationControls only when there is available track info or there is more than one pane', () => {
- *     expect(true).toBeFalsy();
- * });
- */
+it('displays VisualizationControls when there is available track info', async () => {
+    const {
+        getByText,
+        findByText,
+        queryByText,
+        queryByTestId,
+        findByTestId,
+        getByPlaceholderText
+    } = render(<Window />);
+
+    SearchService.searchArtist.mockResolvedValue(testSearchResults);
+    TrackInfoService.getArtistTracks.mockResolvedValue(testTrackInfo);
+
+    expect(queryByTestId('VisualizationControls')).toBeFalsy();
+
+    const searchBox = getByPlaceholderText('Search by artist');
+    const submitButton = getByText('Search');
+
+    fireEvent.change(searchBox, { target: { value: 'test' } });
+    fireEvent.click(submitButton);
+
+    expect(queryByText('Please specify your search.')).toBeNull();
+    const result = await findByText('Test Artist 1');
+    expect(result).toBeTruthy();
+
+    fireEvent.click(result);
+    await expect(findByTestId('VisualizationControls')).resolves.toBeTruthy();
+});
+
+it('displays VisualizationControls when there is more than one pane', () => {
+    const { getByText, queryByTestId } = render(<Window />);
+
+    expect(queryByTestId('VisualizationControls')).toBeFalsy();
+
+    fireEvent.click(getByText('Add Comparison'));
+    expect(queryByTestId('VisualizationControls')).toBeTruthy();
+});

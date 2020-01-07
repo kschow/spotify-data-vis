@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import Pane from './Pane';
 import './Window.scss';
+import VisualizationControls from './VisualizationControls/VisualizationControls';
 import { VisualizationControlsProvider } from './VisualizationControls/VisualizationControlsContext';
 
 const Window = () => {
     const [panes, setPanes] = useState([
         {
-            testId: 0
+            testId: 0,
+            hasTrackInfo: false
         }
     ]);
+
+    const [hasTrackInfo, setHasTrackInfo] = useState(false);
 
     const addPane = (event) => {
         event.preventDefault();
@@ -30,6 +34,10 @@ const Window = () => {
         }
     };
 
+    const hasTrackInfoOrMultiplePanes = () => {
+        return panes.length > 1 || hasTrackInfo;
+    };
+
     const gridSetupCss = () => {
         if (panes.length <= 1) {
             return '';
@@ -43,6 +51,7 @@ const Window = () => {
 
     return (
         <VisualizationControlsProvider>
+            { hasTrackInfoOrMultiplePanes() && <VisualizationControls /> }
             <div className={`Window${gridSetupCss()}`}>
                 {
                     panes.map((pane, index) => {
@@ -50,6 +59,7 @@ const Window = () => {
                             key={pane.testId}
                             testId={pane.testId}
                             deletePane={() => deletePane(index)}
+                            setHasTrackInfo={() => setHasTrackInfo(true)}
                             numPanes={panes.length}
                             index={index}
                         />;

@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
+import VisualizationControls from '../../../Controls/VisualizationControls/VisualizationControls';
 import { TrackInfoProvider } from '../../TrackInfo/TrackInfoContext';
 import { TrackInfoService } from '../../TrackInfo/TrackInfoService';
 import VisualizationArea from '../VisualizationArea';
@@ -42,6 +43,7 @@ it('changing the visualization control value changes the axis labels and bottom 
     const component =
         <TrackInfoProvider>
             <VisualizationControlsProvider>
+                <VisualizationControls />
                 <VisualizationArea />
             </VisualizationControlsProvider>
         </TrackInfoProvider>;
@@ -68,6 +70,7 @@ it('changing the chart type changes the available dropdowns and shows a differen
     const component =
         <TrackInfoProvider>
             <VisualizationControlsProvider>
+                <VisualizationControls />
                 <VisualizationArea />
             </VisualizationControlsProvider>
         </TrackInfoProvider>;

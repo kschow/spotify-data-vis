@@ -24,14 +24,19 @@ const paneIndexCss = (index, numPanes) => {
     return null;
 };
 
-const Pane = ({ testId, deletePane, numPanes, index }) => {
+const Pane = ({ testId, deletePane, setHasTrackInfo, numPanes, index }) => {
     const onePane = numPanes === 1;
 
     return (
         <div className={`Pane${paneIndexCss(index, numPanes)}`} data-testid={testId}>
             <SearchProvider>
                 <TrackInfoProvider>
-                    <SearchAndVisualizationArea testId={testId} deletePane={deletePane} onePane={onePane} />
+                    <SearchAndVisualizationArea
+                        testId={testId}
+                        deletePane={deletePane}
+                        setHasTrackInfo={setHasTrackInfo}
+                        onePane={onePane}
+                    />
                 </TrackInfoProvider>
             </SearchProvider>
         </div>
@@ -41,11 +46,12 @@ const Pane = ({ testId, deletePane, numPanes, index }) => {
 Pane.propTypes = {
     testId: PropTypes.number,
     deletePane: PropTypes.func,
+    setHasTrackInfo: PropTypes.func,
     numPanes: PropTypes.number,
     index: PropTypes.number
 };
 
-const SearchAndVisualizationArea = ({ testId, deletePane, onePane }) => {
+const SearchAndVisualizationArea = ({ testId, deletePane, setHasTrackInfo, onePane }) => {
     // true means show search area, false means show visualization area
     const [searchAndVisualization, setSearchAndVisualization] = useState(true);
     const { tracks, isLoading } = useTrackInfo();
@@ -64,6 +70,12 @@ const SearchAndVisualizationArea = ({ testId, deletePane, onePane }) => {
         toggleSearchAndVisualization();
         goToResults();
     }, [toggleSearchAndVisualization, goToResults]);
+
+    useEffect(() => {
+        if (Object.keys(tracks).length > 0) {
+            setHasTrackInfo();
+        }
+    }, [setHasTrackInfo, tracks]);
 
     useEffect(
         () => {
@@ -156,6 +168,7 @@ const SearchAndVisualizationArea = ({ testId, deletePane, onePane }) => {
 SearchAndVisualizationArea.propTypes = {
     testId: PropTypes.number,
     deletePane: PropTypes.func,
+    setHasTrackInfo: PropTypes.func,
     onePane: PropTypes.bool
 };
 
