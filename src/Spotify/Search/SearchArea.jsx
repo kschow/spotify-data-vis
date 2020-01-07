@@ -10,26 +10,10 @@ const SearchArea = () => {
 
     return (
         <>
-            {
-                isSearchBox ?
-                    <SearchControls /> :
-                    null
-            }
-            {
-                errorMessage === '' ?
-                    null :
-                    <div className="error"><strong>{errorMessage}</strong></div>
-            }
-            {
-                isLoading ?
-                    <Loading /> :
-                    null
-            }
-            {
-                isSearchBox ?
-                    null :
-                    <SearchResults />
-            }
+            { isSearchBox && <SearchControls /> }
+            { errorMessage !== '' && <div className="error"><strong>{errorMessage}</strong></div> }
+            { isLoading && <Loading /> }
+            { !isSearchBox && <SearchResults /> }
         </>
     );
 };

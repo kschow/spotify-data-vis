@@ -10,12 +10,7 @@ const Loading = () => {
     }, []);
 
     return (
-        displayMessage ?
-            <div
-                className="Loading"
-                data-testid="Loading"
-            /> :
-            null
+        displayMessage && <div className="Loading" data-testid="Loading" />
     );
 };
 

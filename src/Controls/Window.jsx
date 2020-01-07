@@ -66,11 +66,10 @@ const Window = () => {
                     })
                 }
                 {
-                    panes.length < 4 ?
+                    panes.length < 4 &&
                         <div className="AddComparison">
                             <button className="Button" onClick={addPane}>Add Comparison</button>
-                        </div> :
-                        null
+                        </div>
                 }
             </div>
         </VisualizationControlsProvider>

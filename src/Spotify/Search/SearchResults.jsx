@@ -12,8 +12,7 @@ const SearchResults = () => {
     };
 
     return (
-        searchResults.isEmpty ?
-            null :
+        !searchResults.isEmpty &&
             <div className="SearchResults">
                 {
                     searchResults.map((result) => {
@@ -45,19 +44,11 @@ const SearchResult = ({
     return (
         <div className="SearchResult" onClick={onClickHandler}>
             <div className="image-container">
-                {
-                    imageUrls.length > 0 ?
-                        <img className="image" src={imageUrls[0]} alt={name}/> :
-                        null
-                }
+                { imageUrls.length > 0 && <img className="image" src={imageUrls[0]} alt={name}/> }
             </div>
             <div className="data">
                 <div>{name}</div>
-                {
-                    popularity ?
-                        <div>Popularity: {popularity}</div> :
-                        null
-                }
+                { popularity && <div>Popularity: {popularity}</div> }
             </div>
         </div>
     );

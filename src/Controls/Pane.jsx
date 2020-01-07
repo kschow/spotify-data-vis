@@ -96,22 +96,19 @@ const SearchAndVisualizationArea = ({ testId, deletePane, setHasTrackInfo, onePa
                 <SearchArea />
                 <div className="Controls">
                     {
-                        isSearchBox && !isEmpty(searchResults) ?
+                        isSearchBox && !isEmpty(searchResults) &&
                             <button className="link-button" onClick={goToResults}>
                                 Show results
-                            </button> :
-                            null
+                            </button>
                     }
                     {
-                        !isSearchBox ?
+                        !isSearchBox &&
                             <button className="link-button" onClick={goToSearch}>
                                 Go back to search
-                            </button> :
-                            null
+                            </button>
                     }
                     {
-                        isEmpty(tracks) ?
-                            null :
+                        !isEmpty(tracks) &&
                             <button className="link-button" onClick={toggleSearchAndVisualization}>
                                 Show visualization
                             </button>
@@ -127,8 +124,7 @@ const SearchAndVisualizationArea = ({ testId, deletePane, setHasTrackInfo, onePa
                 <VisualizationArea />
                 <div className="Controls">
                     {
-                        isLoading ?
-                            null :
+                        !isLoading &&
                             <>
                                 <button className="link-button" onClick={toggleToSearch}>
                                     Go back to search
