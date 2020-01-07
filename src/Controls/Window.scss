@@ -1,5 +1,8 @@
+@import '../Common/Styles/Colors';
+
 .Window {
-  height: 89.5vh;
+  height: 79.85vh;
+  border-top: 2px solid $border-color;
 
   &.Grid {
     display: grid;
@@ -7,16 +10,19 @@
     justify-items: center;
 
     &.Two {
-      grid-template-rows: auto 6rem;
+      grid-template-rows: auto 4rem;
 
       .AddComparison {
         grid-column-end: span 2;
       }
     }
+
+    .AddComparison > button {
+      margin-top: 1.5rem;
+    }
   }
 
   .AddComparison > button {
-    margin-top: 2rem;
     font-size: 1.5rem;
   }
 }

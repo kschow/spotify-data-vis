@@ -1,8 +1,10 @@
+@import './Colors';
+
 .ControlBox {
   display: flex;
   margin: .5rem auto;
   width: max-content;
-  border: 2px solid #666;
+  border: 2px solid $border-color;
 
   :nth-child(n) {
     font-size: 1.25rem;
@@ -13,5 +15,5 @@
 .Button {
   border-radius: 2px;
   border-width: 0;
-  background: #eee;
+  background: $button-color;
 }
