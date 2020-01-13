@@ -1,32 +1,39 @@
-/* eslint-disable no-undefined */
-import React, { createContext, useContext, useState } from 'react';
+import React, { Component } from 'react';
 
-const VisualizationControlsContext = createContext(undefined);
-
-const VisualizationControlsProvider = (props) => {
-    const [chartType, setChartType] = useState('bar-chart');
-    const [visualizationFeatures, setVisualizationFeatures] = useState({
-        barChartFeature: 'loudness',
-        scatterPlotXFeature: 'loudness',
-        scatterPlotYFeature: 'energy'
-    });
-
-    return <VisualizationControlsContext.Provider value={
-        {
-            chartType,
-            setChartType,
-            visualizationFeatures,
-            setVisualizationFeatures
+const withVisualizationControls = (WrappedComponent) => {
+    return class VisualizationControlsWrapper extends Component {
+        constructor (props) {
+            super(props);
+            this.setChartType.bind(this);
+            this.setVisualizationFeatures.bind(this);
+            this.state = {
+                chartType: 'bar-chart',
+                visualizationFeatures: {
+                    barChartFeature: 'loudness',
+                    scatterPlotXFeature: 'loudness',
+                    scatterPlotYFeature: 'energy'
+                }
+            };
         }
-    } {...props} />;
+
+        setChartType (chartType) {
+            this.setState({ chartType });
+        }
+
+        setVisualizationFeatures (visualizationFeatures) {
+            this.setState({ visualizationFeatures });
+        }
+
+        render () {
+            return (
+                <WrappedComponent visualizationControls={{
+                    chartType: this.state.chartType,
+                    visualizationFeatures: this.state.visualizationFeatures,
+                    setChartType: (chartType) => this.setChartType(chartType),
+                    setVisualizationFeatures: (features) => this.setVisualizationFeatures(features)
+                }} {...this.props} />);
+        }
+    };
 };
 
-const useVisualizationControls = () => {
-    const context = useContext(VisualizationControlsContext);
-    if (context === undefined) {
-        throw new Error('useVisualizationControls must be used within a VisualizationControlsProvider');
-    }
-    return context;
-};
-
-export { VisualizationControlsProvider, useVisualizationControls };
+export { withVisualizationControls };

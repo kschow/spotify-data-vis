@@ -4,7 +4,10 @@ import VisualizationControls from '../../../Controls/VisualizationControls/Visua
 import { TrackInfoProvider } from '../../TrackInfo/TrackInfoContext';
 import { TrackInfoService } from '../../TrackInfo/TrackInfoService';
 import VisualizationArea from '../VisualizationArea';
-import { VisualizationControlsProvider } from '../../../Controls/VisualizationControls/VisualizationControlsContext';
+import {
+    VisualizationControlsProvider,
+    withVisualizationControls
+} from '../../../Controls/VisualizationControls/VisualizationControlsContext';
 
 jest.mock('../../TrackInfo/TrackInfoService');
 
@@ -40,12 +43,20 @@ afterEach(() => {
 it('changing the visualization control value changes the axis labels and bottom axis values', () => {
     TrackInfoService.getArtistTracks.mockResolvedValue(mockTrackInfo);
 
+    // eslint-disable-next-line react/prop-types
+    const TestComponent = ({ visualizationControls }) => {
+        return (
+            <>
+                <VisualizationControls visualizationControls={visualizationControls} />
+                <VisualizationArea visualizationControls={visualizationControls} />
+            </>
+        );
+    };
+
+    const VisualizationTestComponent = withVisualizationControls(TestComponent);
     const component =
         <TrackInfoProvider>
-            <VisualizationControlsProvider>
-                <VisualizationControls />
-                <VisualizationArea />
-            </VisualizationControlsProvider>
+            <VisualizationTestComponent />
         </TrackInfoProvider>;
 
     const { getAllByText, queryByText, getByDisplayValue } = render(component);
@@ -67,12 +78,20 @@ it('changing the visualization control value changes the axis labels and bottom 
 it('changing the chart type changes the available dropdowns and shows a different chart with different axes', () => {
     TrackInfoService.getArtistTracks.mockResolvedValue(mockTrackInfo);
 
+    // eslint-disable-next-line react/prop-types
+    const TestComponent = ({ visualizationControls }) => {
+        return (
+            <>
+                <VisualizationControls visualizationControls={visualizationControls} />
+                <VisualizationArea visualizationControls={visualizationControls} />
+            </>
+        );
+    };
+
+    const VisualizationTestComponent = withVisualizationControls(TestComponent);
     const component =
         <TrackInfoProvider>
-            <VisualizationControlsProvider>
-                <VisualizationControls />
-                <VisualizationArea />
-            </VisualizationControlsProvider>
+            <VisualizationTestComponent />
         </TrackInfoProvider>;
 
     const { queryAllByText, queryByText, getByDisplayValue, queryByTestId } = render(component);

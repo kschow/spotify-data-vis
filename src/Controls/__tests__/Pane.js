@@ -3,7 +3,7 @@ import React from 'react';
 import Pane from '../Pane';
 import { SearchService } from '../../Spotify/Search/Service/SearchService';
 import { TrackInfoService } from '../../Spotify/TrackInfo/TrackInfoService';
-import { VisualizationControlsProvider } from '../VisualizationControls/VisualizationControlsContext';
+import { withVisualizationControls } from '../VisualizationControls/VisualizationControlsContext';
 import { testSearchResults, testTrackInfo } from '../TestData/TestData';
 
 jest.mock('../../Spotify/Search/Service/SearchService');
@@ -21,12 +21,10 @@ it('Clicking a search result with tracks switches view to visualization ' +
     SearchService.searchArtist.mockResolvedValue(testSearchResults);
     TrackInfoService.getArtistTracks.mockResolvedValue(testTrackInfo);
 
-    const component =
-        <VisualizationControlsProvider>
-            {/* eslint-disable-next-line no-empty-function */}
-            <Pane setHasTrackInfo={() => {}}/>
-        </VisualizationControlsProvider>;
-    const { getByPlaceholderText, getByText, queryByText, findByText, findByTestId } = render(component);
+    const TestComponent = withVisualizationControls(Pane);
+    const { getByPlaceholderText, getByText, queryByText, findByText, findByTestId } =
+        // eslint-disable-next-line no-empty-function
+        render(<TestComponent setHasTrackInfo={() => {}} />);
 
     const searchBox = getByPlaceholderText('Search by artist');
     const submitButton = getByText('Search');

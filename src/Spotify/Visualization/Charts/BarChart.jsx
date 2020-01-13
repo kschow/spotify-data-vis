@@ -6,11 +6,10 @@ import {
     getFeatureDomainPadding,
     getFeatureLabelText
 } from '../../../Controls/VisualizationControls/Features';
-import { useVisualizationControls } from '../../../Controls/VisualizationControls/VisualizationControlsContext';
 
 /* eslint-disable id-length */
-const BarChart = ({ tracks }) => {
-    const { visualizationFeatures } = useVisualizationControls();
+const BarChart = ({ tracks, visualizationControls }) => {
+    const { visualizationFeatures } = visualizationControls;
     const { barChartFeature } = visualizationFeatures;
 
     const labelText = getFeatureLabelText(barChartFeature);
@@ -50,7 +49,8 @@ const BarChart = ({ tracks }) => {
 };
 
 BarChart.propTypes = {
-    tracks: PropTypes.object
+    tracks: PropTypes.object,
+    visualizationControls: PropTypes.object
 };
 
 export default BarChart;

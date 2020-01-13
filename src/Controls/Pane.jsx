@@ -24,7 +24,7 @@ const paneIndexCss = (index, numPanes) => {
     return null;
 };
 
-const Pane = ({ testId, deletePane, setHasTrackInfo, numPanes, index }) => {
+const Pane = ({ testId, deletePane, setHasTrackInfo, numPanes, index, visualizationControls }) => {
     const onePane = numPanes === 1;
 
     return (
@@ -36,6 +36,7 @@ const Pane = ({ testId, deletePane, setHasTrackInfo, numPanes, index }) => {
                         deletePane={deletePane}
                         setHasTrackInfo={setHasTrackInfo}
                         onePane={onePane}
+                        visualizationControls={visualizationControls}
                     />
                 </TrackInfoProvider>
             </SearchProvider>
@@ -48,10 +49,11 @@ Pane.propTypes = {
     deletePane: PropTypes.func,
     setHasTrackInfo: PropTypes.func,
     numPanes: PropTypes.number,
-    index: PropTypes.number
+    index: PropTypes.number,
+    visualizationControls: PropTypes.object
 };
 
-const SearchAndVisualizationArea = ({ testId, deletePane, setHasTrackInfo, onePane }) => {
+const SearchAndVisualizationArea = ({ testId, deletePane, setHasTrackInfo, onePane, visualizationControls }) => {
     // true means show search area, false means show visualization area
     const [searchAndVisualization, setSearchAndVisualization] = useState(true);
     const { tracks, isLoading } = useTrackInfo();
@@ -121,7 +123,7 @@ const SearchAndVisualizationArea = ({ testId, deletePane, setHasTrackInfo, onePa
     const displayVisualizationArea = () => {
         return (
             <div className="VisualizationArea">
-                <VisualizationArea />
+                <VisualizationArea visualizationControls={visualizationControls} />
                 <div className="Controls">
                     {
                         !isLoading &&
@@ -165,7 +167,8 @@ SearchAndVisualizationArea.propTypes = {
     testId: PropTypes.number,
     deletePane: PropTypes.func,
     setHasTrackInfo: PropTypes.func,
-    onePane: PropTypes.bool
+    onePane: PropTypes.bool,
+    visualizationControls: PropTypes.object
 };
 
 export default Pane;

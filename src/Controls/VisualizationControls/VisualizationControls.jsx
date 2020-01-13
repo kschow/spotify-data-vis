@@ -3,11 +3,10 @@ import React from 'react';
 import '../../Common/Styles/Controls.scss';
 import { AUDIO_FEATURES } from './Features';
 import './VisualizationControls.scss';
-import { useVisualizationControls } from './VisualizationControlsContext';
 
 /* eslint-disable id-length */
-const VisualizationControls = () => {
-    const { chartType, setChartType, visualizationFeatures, setVisualizationFeatures } = useVisualizationControls();
+const VisualizationControls = ({ visualizationControls }) => {
+    const { chartType, setChartType, visualizationFeatures, setVisualizationFeatures } = visualizationControls;
 
     const handleChartTypeChange = (event) => {
         setChartType(event.target.value);
@@ -75,6 +74,10 @@ const VisualizationControls = () => {
             }
         </div>
     );
+};
+
+VisualizationControls.propTypes = {
+    visualizationControls: PropTypes.object
 };
 
 const FeatureDropdown = ({ id, feature, labelText, onChange }) => {

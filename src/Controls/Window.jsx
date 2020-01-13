@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import Pane from './Pane';
-import './Window.scss';
 import VisualizationControls from './VisualizationControls/VisualizationControls';
-import { VisualizationControlsProvider } from './VisualizationControls/VisualizationControlsContext';
+import './Window.scss';
 
-const Window = () => {
+
+const Window = ({ visualizationControls }) => {
     const [panes, setPanes] = useState([{ testId: 0 }]);
 
     const [hasTrackInfo, setHasTrackInfo] = useState(false);
@@ -45,8 +46,8 @@ const Window = () => {
     };
 
     return (
-        <VisualizationControlsProvider>
-            { hasTrackInfoOrMultiplePanes() && <VisualizationControls /> }
+        <>
+            { hasTrackInfoOrMultiplePanes() && <VisualizationControls visualizationControls={visualizationControls} /> }
             <div className={`Window${gridSetupCss()}`}>
                 {
                     panes.map((pane, index) => {
@@ -57,6 +58,7 @@ const Window = () => {
                             setHasTrackInfo={() => setHasTrackInfo(true)}
                             numPanes={panes.length}
                             index={index}
+                            visualizationControls={visualizationControls}
                         />;
                     })
                 }
@@ -67,8 +69,12 @@ const Window = () => {
                         </div>
                 }
             </div>
-        </VisualizationControlsProvider>
+        </>
     );
+};
+
+Window.propTypes = {
+    visualizationControls: PropTypes.object
 };
 
 export default Window;

@@ -2,6 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { SearchService } from '../../Spotify/Search/Service/SearchService';
 import { TrackInfoService } from '../../Spotify/TrackInfo/TrackInfoService';
+import { withVisualizationControls } from '../VisualizationControls/VisualizationControlsContext';
 import Window from '../Window';
 import { testSearchResults, testTrackInfo } from '../TestData/TestData';
 
@@ -13,7 +14,8 @@ afterEach(() => {
 });
 
 it('shows one pane by default, allows up to four panes to be created, deleting panes deletes the correct pane', () => {
-    const { getByText, queryByText, queryByTestId, getByTestId } = render(<Window />);
+    const VisualizationWrappedWindw = withVisualizationControls(Window);
+    const { getByText, queryByText, queryByTestId, getByTestId } = render(<VisualizationWrappedWindw />);
 
     expect(queryByTestId('0')).toBeTruthy();
     const addPaneButton = getByText('Add Comparison');
@@ -36,6 +38,7 @@ it('shows one pane by default, allows up to four panes to be created, deleting p
 });
 
 it('displays VisualizationControls when there is available track info', async () => {
+    const VisualizationWrappedWindw = withVisualizationControls(Window);
     const {
         getByText,
         findByText,
@@ -43,7 +46,7 @@ it('displays VisualizationControls when there is available track info', async ()
         queryByTestId,
         findByTestId,
         getByPlaceholderText
-    } = render(<Window />);
+    } = render(<VisualizationWrappedWindw />);
 
     SearchService.searchArtist.mockResolvedValue(testSearchResults);
     TrackInfoService.getArtistTracks.mockResolvedValue(testTrackInfo);
@@ -65,7 +68,8 @@ it('displays VisualizationControls when there is available track info', async ()
 });
 
 it('displays VisualizationControls when there is more than one pane', () => {
-    const { getByText, queryByTestId } = render(<Window />);
+    const VisualizationWrappedWindw = withVisualizationControls(Window);
+    const { getByText, queryByTestId } = render(<VisualizationWrappedWindw />);
 
     expect(queryByTestId('VisualizationControls')).toBeFalsy();
 

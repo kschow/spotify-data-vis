@@ -8,16 +8,14 @@ import {
     getScatterTooltipText,
     scatterFeature
 } from '../../../Controls/VisualizationControls/Features';
-import { useVisualizationControls } from '../../../Controls/VisualizationControls/VisualizationControlsContext';
 
 /* eslint-disable id-length */
-const ScatterPlot = ({ tracks }) => {
-    const { visualizationFeatures } = useVisualizationControls();
+const ScatterPlot = ({ tracks, visualizationControls }) => {
+    const { visualizationFeatures } = visualizationControls;
     const { scatterPlotXFeature, scatterPlotYFeature } = visualizationFeatures;
 
     const xAxisLabelText = getFeatureLabelText(scatterPlotXFeature);
     const yAxisLabelText = getFeatureLabelText(scatterPlotYFeature);
-
 
     const scatterPlotData = Object.values(tracks)
         .map((track) => {
@@ -62,7 +60,8 @@ const ScatterPlot = ({ tracks }) => {
 };
 
 ScatterPlot.propTypes = {
-    tracks: PropTypes.object
+    tracks: PropTypes.object,
+    visualizationControls: PropTypes.object
 };
 
 export default ScatterPlot;
