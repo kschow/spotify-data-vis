@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import SearchArea from '../Spotify/Search/SearchArea';
-import { SearchProvider, useSearch } from '../Spotify/Search/Service/SearchContext';
+import { withSearch } from '../Spotify/Search/Service/SearchContext';
 import { TrackInfoProvider, useTrackInfo } from '../Spotify/TrackInfo/TrackInfoContext';
 import VisualizationArea from '../Spotify/Visualization/VisualizationArea';
 import './Pane.scss';
@@ -27,19 +27,19 @@ const paneIndexCss = (index, numPanes) => {
 const Pane = ({ testId, deletePane, setHasTrackInfo, numPanes, index, visualizationControls }) => {
     const onePane = numPanes === 1;
 
+    const SearchWrappedSvArea = withSearch(SearchAndVisualizationArea);
+
     return (
         <div className={`Pane${paneIndexCss(index, numPanes)}`} data-testid={testId}>
-            <SearchProvider>
-                <TrackInfoProvider>
-                    <SearchAndVisualizationArea
-                        testId={testId}
-                        deletePane={deletePane}
-                        setHasTrackInfo={setHasTrackInfo}
-                        onePane={onePane}
-                        visualizationControls={visualizationControls}
-                    />
-                </TrackInfoProvider>
-            </SearchProvider>
+            <TrackInfoProvider>
+                <SearchWrappedSvArea
+                    testId={testId}
+                    deletePane={deletePane}
+                    setHasTrackInfo={setHasTrackInfo}
+                    onePane={onePane}
+                    visualizationControls={visualizationControls}
+                />
+            </TrackInfoProvider>
         </div>
     );
 };
@@ -53,11 +53,16 @@ Pane.propTypes = {
     visualizationControls: PropTypes.object
 };
 
-const SearchAndVisualizationArea = ({ testId, deletePane, setHasTrackInfo, onePane, visualizationControls }) => {
+const SearchAndVisualizationArea = ({ testId,
+    deletePane,
+    setHasTrackInfo,
+    onePane,
+    visualizationControls,
+    searchContext }) => {
     // true means show search area, false means show visualization area
     const [searchAndVisualization, setSearchAndVisualization] = useState(true);
     const { tracks, isLoading } = useTrackInfo();
-    const { isSearchBox, searchResults, goToSearch, goToResults } = useSearch();
+    const { isSearchBox, searchResults, goToSearch, goToResults } = searchContext;
 
     const toggleSearchAndVisualization = useCallback(() => {
         setSearchAndVisualization(!searchAndVisualization);
@@ -95,7 +100,7 @@ const SearchAndVisualizationArea = ({ testId, deletePane, setHasTrackInfo, onePa
     const displaySearchArea = () => {
         return (
             <div className="SearchArea">
-                <SearchArea />
+                <SearchArea searchContext={searchContext} />
                 <div className="Controls">
                     {
                         isSearchBox && !isEmpty(searchResults) &&
@@ -168,7 +173,8 @@ SearchAndVisualizationArea.propTypes = {
     deletePane: PropTypes.func,
     setHasTrackInfo: PropTypes.func,
     onePane: PropTypes.bool,
-    visualizationControls: PropTypes.object
+    visualizationControls: PropTypes.object,
+    searchContext: PropTypes.object
 };
 
 export default Pane;

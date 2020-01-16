@@ -31,7 +31,8 @@ const withVisualizationControls = (WrappedComponent) => {
                     visualizationFeatures: this.state.visualizationFeatures,
                     setChartType: (chartType) => this.setChartType(chartType),
                     setVisualizationFeatures: (features) => this.setVisualizationFeatures(features)
-                }} {...this.props} />);
+                }} {...this.props} />
+            );
         }
     };
 };

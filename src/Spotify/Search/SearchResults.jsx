@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useTrackInfo } from '../TrackInfo/TrackInfoContext';
-import { useSearch } from './Service/SearchContext';
 
-const SearchResults = () => {
-    const { searchType, searchResults } = useSearch();
+const SearchResults = ({ searchContext }) => {
+    const { searchType, searchResults } = searchContext;
     const { getTracks } = useTrackInfo();
 
     const getTracksInfo = (spotifyId) => {
@@ -28,6 +27,10 @@ const SearchResults = () => {
                 }
             </div>
     );
+};
+
+SearchResults.propTypes = {
+    searchContext: PropTypes.object
 };
 
 const SearchResult = ({
