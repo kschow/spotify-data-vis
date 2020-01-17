@@ -1,13 +1,10 @@
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import VisualizationControls from '../../../Controls/VisualizationControls/VisualizationControls';
-import { TrackInfoProvider } from '../../TrackInfo/TrackInfoContext';
+import { withVisualizationControls } from '../../../Controls/VisualizationControls/VisualizationControlsContext';
+import { withTrackInfo } from '../../TrackInfo/TrackInfoContext';
 import { TrackInfoService } from '../../TrackInfo/TrackInfoService';
 import VisualizationArea from '../VisualizationArea';
-import {
-    VisualizationControlsProvider,
-    withVisualizationControls
-} from '../../../Controls/VisualizationControls/VisualizationControlsContext';
 
 jest.mock('../../TrackInfo/TrackInfoService');
 
@@ -44,20 +41,17 @@ it('changing the visualization control value changes the axis labels and bottom 
     TrackInfoService.getArtistTracks.mockResolvedValue(mockTrackInfo);
 
     // eslint-disable-next-line react/prop-types
-    const TestComponent = ({ visualizationControls }) => {
+    const TestComponent = ({ visualizationControls, trackInfoContext }) => {
         return (
             <>
                 <VisualizationControls visualizationControls={visualizationControls} />
-                <VisualizationArea visualizationControls={visualizationControls} />
+                <VisualizationArea visualizationControls={visualizationControls} trackInfoContext={trackInfoContext} />
             </>
         );
     };
 
-    const VisualizationTestComponent = withVisualizationControls(TestComponent);
-    const component =
-        <TrackInfoProvider>
-            <VisualizationTestComponent />
-        </TrackInfoProvider>;
+    const VisualizationTestComponent = withVisualizationControls(withTrackInfo(TestComponent));
+    const component = <VisualizationTestComponent />;
 
     const { getAllByText, queryByText, getByDisplayValue } = render(component);
 
@@ -79,20 +73,17 @@ it('changing the chart type changes the available dropdowns and shows a differen
     TrackInfoService.getArtistTracks.mockResolvedValue(mockTrackInfo);
 
     // eslint-disable-next-line react/prop-types
-    const TestComponent = ({ visualizationControls }) => {
+    const TestComponent = ({ visualizationControls, trackInfoContext }) => {
         return (
             <>
                 <VisualizationControls visualizationControls={visualizationControls} />
-                <VisualizationArea visualizationControls={visualizationControls} />
+                <VisualizationArea visualizationControls={visualizationControls} trackInfoContext={trackInfoContext} />
             </>
         );
     };
 
-    const VisualizationTestComponent = withVisualizationControls(TestComponent);
-    const component =
-        <TrackInfoProvider>
-            <VisualizationTestComponent />
-        </TrackInfoProvider>;
+    const VisualizationTestComponent = withVisualizationControls(withTrackInfo(TestComponent));
+    const component = <VisualizationTestComponent />;
 
     const { queryAllByText, queryByText, getByDisplayValue, queryByTestId } = render(component);
 

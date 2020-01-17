@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Loading from '../../Common/Loading/Loading';
-import { useTrackInfo } from '../TrackInfo/TrackInfoContext';
 import BarChart from './Charts/BarChart';
 import ScatterPlot from './Charts/ScatterPlot';
 import './VisualizationArea.scss';
 
-const VisualizationArea = ({ visualizationControls }) => {
-    const { tracks, isLoading } = useTrackInfo();
+const VisualizationArea = ({ visualizationControls, trackInfoContext }) => {
+    const { tracks, isLoading } = trackInfoContext;
     const { chartType } = visualizationControls;
 
     return (
@@ -28,7 +27,8 @@ const VisualizationArea = ({ visualizationControls }) => {
 };
 
 VisualizationArea.propTypes = {
-    visualizationControls: PropTypes.object
+    visualizationControls: PropTypes.object,
+    trackInfoContext: PropTypes.object
 };
 
 export default VisualizationArea;

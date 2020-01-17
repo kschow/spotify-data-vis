@@ -5,7 +5,7 @@ import './SearchArea.scss';
 import SearchControls from './SearchControls';
 import SearchResults from './SearchResults';
 
-const SearchArea = ({ searchContext }) => {
+const SearchArea = ({ searchContext, trackInfoContext }) => {
     const { errorMessage, isSearchBox, isLoading } = searchContext;
 
     return (
@@ -13,13 +13,14 @@ const SearchArea = ({ searchContext }) => {
             { isSearchBox && <SearchControls searchContext={searchContext} /> }
             { errorMessage !== '' && <div className="error"><strong>{errorMessage}</strong></div> }
             { isLoading && <Loading /> }
-            { !isSearchBox && <SearchResults searchContext={searchContext} /> }
+            { !isSearchBox && <SearchResults searchContext={searchContext} trackInfoContext={trackInfoContext} /> }
         </>
     );
 };
 
 SearchArea.propTypes = {
-    searchContext: PropTypes.object
+    searchContext: PropTypes.object,
+    trackInfoContext: PropTypes.object
 };
 
 export default SearchArea;

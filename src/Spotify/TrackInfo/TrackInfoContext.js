@@ -1,49 +1,54 @@
 /* eslint-disable no-undefined */
-import React, { createContext, useContext, useState } from 'react';
+import React, { Component } from 'react';
 import { TrackInfoService } from './TrackInfoService';
 
-const TrackInfoContext = createContext(undefined);
+const withTrackInfo = (WrappedComponent) => {
+    return class TrackInfoWrapper extends Component {
+        constructor (props) {
+            super(props);
 
-const TrackInfoProvider = (props) => {
-    const [tracks, setTracks] = useState({});
-    const [errorMessage, setErrorMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+            this.state = {
+                tracks: {},
+                errorMessage: '',
+                isLoading: false
+            };
 
-    const getTracksForX = (tracksFunction, spotifyId) => {
-        return tracksFunction(spotifyId)
-            .then((response) => setTracks(response))
-            .catch(() => setErrorMessage('Getting track information failed.'))
-            .finally(() => setIsLoading(false));
-    };
+            this.getTracksForX.bind(this);
+            this.getTracks.bind(this);
+        }
 
-    const getTracks = (spotifyId, searchType) => {
-        setTracks({});
-        setErrorMessage('');
-        setIsLoading(true);
+        getTracksForX (tracksFunction, spotifyId) {
+            return tracksFunction(spotifyId)
+                .then((response) => this.setState({ tracks: response }))
+                .catch(() => this.setState({ errorMessage: 'Getting track information failed.' }))
+                .finally(() => this.setState({ isLoading: false }));
+        }
 
-        if (searchType === 'artist') {
-            getTracksForX(TrackInfoService.getArtistTracks, spotifyId);
-        } else if (searchType === 'playlist') {
-            getTracksForX(TrackInfoService.getPlaylistTracks, spotifyId);
+        getTracks (spotifyId, searchType) {
+            this.setState({
+                tracks: {},
+                errorMessage: '',
+                isLoading: true
+            });
+
+            if (searchType === 'artist') {
+                this.getTracksForX(TrackInfoService.getArtistTracks, spotifyId);
+            } else if (searchType === 'playlist') {
+                this.getTracksForX(TrackInfoService.getPlaylistTracks, spotifyId);
+            }
+        }
+
+        render () {
+            return (
+                <WrappedComponent trackInfoContext={{
+                    tracks: this.state.tracks,
+                    errorMessage: this.state.errorMessage,
+                    isLoading: this.state.isLoading,
+                    getTracks: (spotifyId, searchType) => this.getTracks(spotifyId, searchType)
+                }} {...this.props} />
+            );
         }
     };
-
-    return <TrackInfoContext.Provider value={
-        {
-            tracks,
-            errorMessage,
-            isLoading,
-            getTracks
-        }
-    } {...props} />;
 };
 
-const useTrackInfo = () => {
-    const context = useContext(TrackInfoContext);
-    if (context === undefined) {
-        throw new Error('useTrackInfo must be used within a TrackInfoProvider');
-    }
-    return context;
-};
-
-export { TrackInfoProvider, useTrackInfo };
+export { withTrackInfo };

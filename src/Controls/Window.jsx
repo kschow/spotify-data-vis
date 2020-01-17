@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import Pane from './Pane';
+import { Pane } from './Pane';
 import VisualizationControls from './VisualizationControls/VisualizationControls';
 import './Window.scss';
 
