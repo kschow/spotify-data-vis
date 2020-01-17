@@ -27,8 +27,6 @@ const paneIndexCss = (index, numPanes) => {
 const Pane = ({ testId, deletePane, setHasTrackInfo, numPanes, index, visualizationControls }) => {
     const onePane = numPanes === 1;
 
-    const SearchWrappedSvArea = withSearch(SearchAndVisualizationArea);
-
     return (
         <div className={`Pane${paneIndexCss(index, numPanes)}`} data-testid={testId}>
             <TrackInfoProvider>
@@ -176,5 +174,7 @@ SearchAndVisualizationArea.propTypes = {
     visualizationControls: PropTypes.object,
     searchContext: PropTypes.object
 };
+
+const SearchWrappedSvArea = withSearch(SearchAndVisualizationArea);
 
 export default Pane;
