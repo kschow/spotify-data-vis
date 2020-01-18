@@ -1,45 +1,58 @@
-import React, { useState } from 'react';
-import '../../Common/Styles/Controls.scss';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import '../../Common/Styles/Controls.scss';
 
-const SearchControls = ({ searchContext }) => {
-    const [searchText, setSearchText] = useState('');
+class SearchControls extends Component {
+    constructor(props) {
+        super(props);
 
-    const { searchType, setSearchType, search } = searchContext;
+        this.state = {
+            searchText: ''
+        };
 
-    const handleSearchTextChange = (event) => {
-        setSearchText(event.target.value);
-    };
+        this.handleSearchTextChange.bind(this);
+        this.handleSearchTypeChange.bind(this);
+        this.onSubmit.bind(this);
+    }
 
-    const handleSearchTypeChange = (event) => {
-        setSearchType(event.target.value);
-    };
+    handleSearchTextChange(event) {
+        this.setState({ searchText: event.target.value });
+    }
 
-    const onSubmit = (event) => {
+    handleSearchTypeChange(event) {
+        this.props.searchContext.setSearchType(event.target.value);
+    }
+
+    onSubmit(event) {
         event.preventDefault();
-        search(searchText, searchType);
-    };
+        const { searchType, search } = this.props.searchContext;
+        search(this.state.searchText, searchType);
+    }
 
-    return (
-        <div className="SearchControls ControlBox">
-            <form onSubmit={onSubmit}>
-                <input
-                    type="text"
-                    placeholder={`Search by ${searchType}`}
-                    value={searchText}
-                    onChange={handleSearchTextChange} />
-                <select
-                    name="searchType"
-                    value={searchType}
-                    onChange={handleSearchTypeChange} >
-                    <option value="artist">Artist</option>
-                    <option value="playlist">Playlist</option>
-                </select>
-                <button className="Button">Search</button>
-            </form>
-        </div>
-    );
-};
+    render() {
+        const { searchType } = this.props.searchContext;
+
+        return (
+            <div className="SearchControls ControlBox">
+                <form onSubmit={(event) => this.onSubmit(event)}>
+                    <input
+                        type="text"
+                        placeholder={`Search by ${searchType}`}
+                        value={this.state.searchText}
+                        onChange={(event) => this.handleSearchTextChange(event)} />
+                    <select
+                        name="searchType"
+                        value={searchType}
+                        onChange={(event) => this.handleSearchTypeChange(event)} >
+                        <option value="artist">Artist</option>
+                        <option value="playlist">Playlist</option>
+                    </select>
+                    <button className="Button">Search</button>
+                </form>
+            </div>
+        );
+    }
+}
 
 SearchControls.propTypes = {
     searchContext: PropTypes.object
