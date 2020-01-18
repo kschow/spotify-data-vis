@@ -1,77 +1,94 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { Pane } from './Pane';
 import VisualizationControls from './VisualizationControls/VisualizationControls';
 import './Window.scss';
 
+class Window extends Component {
+    constructor(props) {
+        super(props);
 
-const Window = ({ visualizationControls }) => {
-    const [panes, setPanes] = useState([{ testId: 0 }]);
+        this.state = {
+            panes: [{ testId: 0 }],
+            hasTrackInfo: false
+        };
 
-    const [hasTrackInfo, setHasTrackInfo] = useState(false);
+        this.addPane.bind(this);
+        this.deletePane.bind(this);
+    }
 
-    const addPane = (event) => {
+    addPane(event) {
         event.preventDefault();
 
-        const lastPane = panes.length === 0 ?
+        const lastPane = this.state.panes.length === 0 ?
             { testId: 0 } :
-            panes[panes.length - 1];
-        setPanes([
-            ...panes, {
-                testId: lastPane.testId + 1
-            }
-        ]);
-    };
+            this.state.panes[this.state.panes.length - 1];
 
-    const deletePane = (index) => {
-        if (panes.length > 1) {
-            panes.splice(index, 1);
-            setPanes([...panes]);
+        this.setState({
+            panes: [
+                ...this.state.panes, {
+                    testId: lastPane.testId + 1
+                }
+            ]
+        });
+    }
+
+    deletePane(index) {
+        if (this.state.panes.length > 1) {
+            this.state.panes.splice(index, 1);
+            this.setState({
+                panes: [...this.state.panes]
+            });
         }
-    };
+    }
 
-    const hasTrackInfoOrMultiplePanes = () => {
-        return panes.length > 1 || hasTrackInfo;
-    };
+    hasTrackInfoOrMultiplePanes() {
+        return this.state.panes.length > 1 || this.state.hasTrackInfo;
+    }
 
-    const gridSetupCss = () => {
-        if (panes.length <= 1) {
+    gridSetupCss() {
+        if (this.state.panes.length <= 1) {
             return '';
         }
-        if (panes.length === 2) {
+        if (this.state.panes.length === 2) {
             return ' Grid Two';
         }
 
         return ' Grid';
-    };
+    }
 
-    return (
-        <>
-            { hasTrackInfoOrMultiplePanes() && <VisualizationControls visualizationControls={visualizationControls} /> }
-            <div className={`Window${gridSetupCss()}`}>
+    render() {
+        return (
+            <>
                 {
-                    panes.map((pane, index) => {
-                        return <Pane
-                            key={pane.testId}
-                            testId={pane.testId}
-                            deletePane={() => deletePane(index)}
-                            setHasTrackInfo={() => setHasTrackInfo(true)}
-                            numPanes={panes.length}
-                            index={index}
-                            visualizationControls={visualizationControls}
-                        />;
-                    })
+                    this.hasTrackInfoOrMultiplePanes() &&
+                    <VisualizationControls visualizationControls={this.props.visualizationControls} />
                 }
-                {
-                    panes.length < 4 &&
+                <div className={`Window${this.gridSetupCss()}`}>
+                    {
+                        this.state.panes.map((pane, index) => {
+                            return <Pane
+                                key={pane.testId}
+                                testId={pane.testId}
+                                deletePane={() => this.deletePane(index)}
+                                setHasTrackInfo={() => this.setState({ hasTrackInfo: true })}
+                                numPanes={this.state.panes.length}
+                                index={index}
+                                visualizationControls={this.props.visualizationControls}
+                            />;
+                        })
+                    }
+                    {
+                        this.state.panes.length < 4 &&
                         <div className="AddComparison">
-                            <button className="Button" onClick={addPane}>Add Comparison</button>
+                            <button className="Button" onClick={(event) => this.addPane(event)}>Add Comparison</button>
                         </div>
-                }
-            </div>
-        </>
-    );
-};
+                    }
+                </div>
+            </>
+        );
+    }
+}
 
 Window.propTypes = {
     visualizationControls: PropTypes.object
