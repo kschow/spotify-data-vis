@@ -6,10 +6,7 @@ const withSearch = (WrappedComponent) => {
     return class SearchWrapper extends Component {
         constructor (props) {
             super(props);
-            this.searchForX.bind(this);
-            this.search.bind(this);
-            this.goToSearch.bind(this);
-            this.goToResults.bind(this);
+
             this.state = {
                 searchType: 'artist',
                 searchResults: [],
@@ -17,6 +14,11 @@ const withSearch = (WrappedComponent) => {
                 isLoading: false,
                 isSearchBox: true
             };
+
+            this.searchForX.bind(this);
+            this.search.bind(this);
+            this.goToSearch.bind(this);
+            this.goToResults.bind(this);
         }
 
         searchForX (searchFunction, searchTerm) {

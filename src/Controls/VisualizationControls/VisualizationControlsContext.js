@@ -4,8 +4,7 @@ const withVisualizationControls = (WrappedComponent) => {
     return class VisualizationControlsWrapper extends Component {
         constructor (props) {
             super(props);
-            this.setChartType.bind(this);
-            this.setVisualizationFeatures.bind(this);
+
             this.state = {
                 chartType: 'bar-chart',
                 visualizationFeatures: {
@@ -14,6 +13,9 @@ const withVisualizationControls = (WrappedComponent) => {
                     scatterPlotYFeature: 'energy'
                 }
             };
+
+            this.setChartType.bind(this);
+            this.setVisualizationFeatures.bind(this);
         }
 
         setChartType (chartType) {

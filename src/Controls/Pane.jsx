@@ -53,14 +53,14 @@ class SearchAndVisualizationArea extends Component {
     constructor(props) {
         super(props);
 
-        this.toggleSearchAndVisualization.bind(this);
-        this.toggleToSearch.bind(this);
-        this.toggleToResults.bind(this);
-
         this.state = {
             // true means show search area, false means show visualization area
             searchAndVisualization: true
         };
+
+        this.toggleSearchAndVisualization.bind(this);
+        this.toggleToSearch.bind(this);
+        this.toggleToResults.bind(this);
     }
 
     componentDidUpdate(prevProps) {
