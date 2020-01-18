@@ -5,12 +5,7 @@ import VisualizationControls from './VisualizationControls/VisualizationControls
 import { VisualizationControlsProvider } from './VisualizationControls/VisualizationControlsContext';
 
 const Window = () => {
-    const [panes, setPanes] = useState([
-        {
-            testId: 0,
-            hasTrackInfo: false
-        }
-    ]);
+    const [panes, setPanes] = useState([{ testId: 0 }]);
 
     const [hasTrackInfo, setHasTrackInfo] = useState(false);
 
