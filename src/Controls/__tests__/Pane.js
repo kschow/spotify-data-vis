@@ -60,4 +60,11 @@ it('Clicking a search result with tracks switches view to visualization ' +
     expect(queryByText('Go back to search')).toBeFalsy();
     expect(queryByText('Show results')).toBeTruthy();
     expect(queryByText('Show visualization')).toBeTruthy();
+
+    const goToResults = getByText('Show results');
+    fireEvent.click(goToResults);
+    expect(queryByText('Test Artist 1')).toBeTruthy();
+    expect(queryByText('Go back to search')).toBeTruthy();
+    expect(queryByText('Show results')).toBeFalsy();
+    expect(queryByText('Show visualization')).toBeTruthy();
 });
