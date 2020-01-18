@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import SearchArea from '../Spotify/Search/SearchArea';
 import { withSearch } from '../Spotify/Search/Service/SearchContext';
 import { withTrackInfo } from '../Spotify/TrackInfo/TrackInfoContext';
@@ -49,55 +49,58 @@ Pane.propTypes = {
     visualizationControls: PropTypes.object
 };
 
-const SearchAndVisualizationArea = ({ testId,
-    deletePane,
-    setHasTrackInfo,
-    onePane,
-    visualizationControls,
-    searchContext,
-    trackInfoContext }) => {
-    // true means show search area, false means show visualization area
-    const [searchAndVisualization, setSearchAndVisualization] = useState(true);
-    const { tracks, isLoading } = trackInfoContext;
-    const { isSearchBox, searchResults, goToSearch, goToResults } = searchContext;
+class SearchAndVisualizationArea extends Component {
+    constructor(props) {
+        super(props);
 
-    const toggleSearchAndVisualization = useCallback(() => {
-        setSearchAndVisualization(!searchAndVisualization);
-    }, [searchAndVisualization]);
+        this.toggleSearchAndVisualization.bind(this);
+        this.toggleToSearch.bind(this);
+        this.toggleToResults.bind(this);
 
-    const toggleToSearch = useCallback(() => {
-        toggleSearchAndVisualization();
-        goToSearch();
-    }, [toggleSearchAndVisualization, goToSearch]);
+        this.state = {
+            // true means show search area, false means show visualization area
+            searchAndVisualization: true
+        };
+    }
 
-    const toggleToResults = useCallback(() => {
-        toggleSearchAndVisualization();
-        goToResults();
-    }, [toggleSearchAndVisualization, goToResults]);
+    componentDidUpdate(prevProps) {
+        const { tracks: prevTracks, isLoading: prevIsLoading } = prevProps.trackInfoContext;
+        const { tracks, isLoading } = this.props.trackInfoContext;
 
-    useEffect(() => {
-        if (Object.keys(tracks).length > 0) {
-            setHasTrackInfo();
+        if (prevTracks !== tracks && Object.keys(tracks).length > 0) {
+            this.props.setHasTrackInfo();
         }
-    }, [setHasTrackInfo, tracks]);
 
-    useEffect(
-        () => {
-            if (searchAndVisualization && isLoading) {
-                toggleSearchAndVisualization();
+        if (isLoading !== prevIsLoading) {
+            if (this.state.searchAndVisualization && isLoading) {
+                this.toggleSearchAndVisualization();
             }
-        },
-        [
-            searchAndVisualization,
-            isLoading,
-            toggleSearchAndVisualization
-        ]
-    );
+        }
+    }
 
-    const displaySearchArea = () => {
+    toggleSearchAndVisualization() {
+        this.setState({
+            searchAndVisualization: !this.state.searchAndVisualization
+        });
+    }
+
+    toggleToSearch() {
+        this.toggleSearchAndVisualization();
+        this.props.searchContext.goToSearch();
+    }
+
+    toggleToResults() {
+        this.toggleSearchAndVisualization();
+        this.props.searchContext.goToResults();
+    }
+
+    displaySearchArea() {
+        const { isSearchBox, searchResults, goToSearch, goToResults } = this.props.searchContext;
+        const { tracks } = this.props.trackInfoContext;
+
         return (
             <div className="SearchArea">
-                <SearchArea searchContext={searchContext} trackInfoContext={trackInfoContext} />
+                <SearchArea searchContext={this.props.searchContext} trackInfoContext={this.props.trackInfoContext} />
                 <div className="Controls">
                     {
                         isSearchBox && !isEmpty(searchResults) &&
@@ -113,27 +116,31 @@ const SearchAndVisualizationArea = ({ testId,
                     }
                     {
                         !isEmpty(tracks) &&
-                            <button className="link-button" onClick={toggleSearchAndVisualization}>
+                            <button className="link-button" onClick={() => this.toggleSearchAndVisualization()}>
                                 Show visualization
                             </button>
                     }
                 </div>
             </div>
         );
-    };
+    }
 
-    const displayVisualizationArea = () => {
+    displayVisualizationArea() {
+        const { isLoading } = this.props.trackInfoContext;
         return (
             <div className="VisualizationArea">
-                <VisualizationArea visualizationControls={visualizationControls} trackInfoContext={trackInfoContext} />
+                <VisualizationArea
+                    visualizationControls={this.props.visualizationControls}
+                    trackInfoContext={this.props.trackInfoContext}
+                />
                 <div className="Controls">
                     {
                         !isLoading &&
                             <>
-                                <button className="link-button" onClick={toggleToSearch}>
+                                <button className="link-button" onClick={() => this.toggleToSearch()}>
                                     Go back to search
                                 </button>
-                                <button className="link-button" onClick={toggleToResults}>
+                                <button className="link-button" onClick={() => this.toggleToResults()}>
                                     Show results
                                 </button>
                             </>
@@ -141,29 +148,34 @@ const SearchAndVisualizationArea = ({ testId,
                 </div>
             </div>
         );
-    };
+    }
 
-    return (
-        <>
-            {
-                searchAndVisualization ?
-                    displaySearchArea() :
-                    displayVisualizationArea()
-            }
-            {
-                isLoading || onePane ?
-                    null :
-                    <button
-                        className="DeleteButton"
-                        onClick={deletePane}
-                        title="Delete"
-                        data-testid={`delete-${testId}`}>
-                        X
-                    </button>
-            }
-        </>
-    );
-};
+    render() {
+        const { onePane, deletePane, testId, trackInfoContext } = this.props;
+        const { isLoading } = trackInfoContext;
+
+        return (
+            <>
+                {
+                    this.state.searchAndVisualization ?
+                        this.displaySearchArea() :
+                        this.displayVisualizationArea()
+                }
+                {
+                    isLoading || onePane ?
+                        null :
+                        <button
+                            className="DeleteButton"
+                            onClick={deletePane}
+                            title="Delete"
+                            data-testid={`delete-${testId}`}>
+                            X
+                        </button>
+                }
+            </>
+        );
+    }
+}
 
 SearchAndVisualizationArea.propTypes = {
     testId: PropTypes.number,
