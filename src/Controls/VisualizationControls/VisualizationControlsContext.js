@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 const withVisualizationControls = (WrappedComponent) => {
     return class VisualizationControlsWrapper extends Component {
-        constructor (props) {
+        constructor(props) {
             super(props);
 
             this.state = {
@@ -18,15 +18,15 @@ const withVisualizationControls = (WrappedComponent) => {
             this.setVisualizationFeatures.bind(this);
         }
 
-        setChartType (chartType) {
+        setChartType(chartType) {
             this.setState({ chartType });
         }
 
-        setVisualizationFeatures (visualizationFeatures) {
+        setVisualizationFeatures(visualizationFeatures) {
             this.setState({ visualizationFeatures });
         }
 
-        render () {
+        render() {
             return (
                 <WrappedComponent visualizationControls={{
                     chartType: this.state.chartType,

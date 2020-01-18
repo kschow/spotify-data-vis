@@ -4,7 +4,7 @@ import { TrackInfoService } from './TrackInfoService';
 
 const withTrackInfo = (WrappedComponent) => {
     return class TrackInfoWrapper extends Component {
-        constructor (props) {
+        constructor(props) {
             super(props);
 
             this.state = {
@@ -17,14 +17,14 @@ const withTrackInfo = (WrappedComponent) => {
             this.getTracks.bind(this);
         }
 
-        getTracksForX (tracksFunction, spotifyId) {
+        getTracksForX(tracksFunction, spotifyId) {
             return tracksFunction(spotifyId)
                 .then((response) => this.setState({ tracks: response }))
                 .catch(() => this.setState({ errorMessage: 'Getting track information failed.' }))
                 .finally(() => this.setState({ isLoading: false }));
         }
 
-        getTracks (spotifyId, searchType) {
+        getTracks(spotifyId, searchType) {
             this.setState({
                 tracks: {},
                 errorMessage: '',
@@ -38,7 +38,7 @@ const withTrackInfo = (WrappedComponent) => {
             }
         }
 
-        render () {
+        render() {
             return (
                 <WrappedComponent trackInfoContext={{
                     tracks: this.state.tracks,

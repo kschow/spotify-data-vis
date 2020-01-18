@@ -4,7 +4,7 @@ import { SearchService } from './SearchService';
 
 const withSearch = (WrappedComponent) => {
     return class SearchWrapper extends Component {
-        constructor (props) {
+        constructor(props) {
             super(props);
 
             this.state = {
@@ -21,14 +21,14 @@ const withSearch = (WrappedComponent) => {
             this.goToResults.bind(this);
         }
 
-        searchForX (searchFunction, searchTerm) {
+        searchForX(searchFunction, searchTerm) {
             return searchFunction(searchTerm)
                 .then((response) => this.setState({ searchResults: response }))
                 .catch(() => this.setState({ errorMessage: 'Spotify search failed.' }))
                 .finally(() => this.setState({ isLoading: false }));
         }
 
-        search (searchTerm) {
+        search(searchTerm) {
             if (searchTerm === '') {
                 this.setState({ errorMessage: 'Please specify your search.' });
                 return;
@@ -48,17 +48,17 @@ const withSearch = (WrappedComponent) => {
             }
         }
 
-        goToSearch () {
+        goToSearch() {
             this.setState({ isSearchBox: true });
         }
 
-        goToResults () {
+        goToResults() {
             if (!isEmpty(this.state.searchResults)) {
                 this.setState({ isSearchBox: false });
             }
         }
 
-        render () {
+        render() {
             return (
                 <WrappedComponent searchContext={{
                     searchType: this.state.searchType,
