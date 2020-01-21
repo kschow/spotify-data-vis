@@ -9,12 +9,8 @@ const Window = () => {
 
     const [hasTrackInfo, setHasTrackInfo] = useState(false);
 
-    const addPane = (event) => {
-        event.preventDefault();
-
-        const lastPane = panes.length === 0 ?
-            { testId: 0 } :
-            panes[panes.length - 1];
+    const addPane = () => {
+        const lastPane = panes[panes.length - 1];
         setPanes([
             ...panes, {
                 testId: lastPane.testId + 1
