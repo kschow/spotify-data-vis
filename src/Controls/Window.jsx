@@ -17,12 +17,8 @@ class Window extends Component {
         this.deletePane.bind(this);
     }
 
-    addPane(event) {
-        event.preventDefault();
-
-        const lastPane = this.state.panes.length === 0 ?
-            { testId: 0 } :
-            this.state.panes[this.state.panes.length - 1];
+    addPane() {
+        const lastPane = this.state.panes[this.state.panes.length - 1];
 
         this.setState({
             panes: [
@@ -81,7 +77,7 @@ class Window extends Component {
                     {
                         this.state.panes.length < 4 &&
                         <div className="AddComparison">
-                            <button className="Button" onClick={(event) => this.addPane(event)}>Add Comparison</button>
+                            <button className="Button" onClick={() => this.addPane()}>Add Comparison</button>
                         </div>
                     }
                 </div>
