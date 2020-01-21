@@ -1,4 +1,3 @@
-/* eslint-disable no-undefined */
 import React, { Component } from 'react';
 import { TrackInfoService } from './TrackInfoService';
 
