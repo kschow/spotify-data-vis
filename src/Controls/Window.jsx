@@ -13,8 +13,8 @@ class Window extends Component {
             hasTrackInfo: false
         };
 
-        this.addPane.bind(this);
-        this.deletePane.bind(this);
+        this.addPane = this.addPane.bind(this);
+        this.deletePane = this.deletePane.bind(this);
     }
 
     addPane() {
@@ -30,12 +30,14 @@ class Window extends Component {
     }
 
     deletePane(index) {
-        if (this.state.panes.length > 1) {
-            this.state.panes.splice(index, 1);
-            this.setState({
-                panes: [...this.state.panes]
-            });
-        }
+        return () => {
+            if (this.state.panes.length > 1) {
+                this.state.panes.splice(index, 1);
+                this.setState({
+                    panes: [...this.state.panes]
+                });
+            }
+        };
     }
 
     hasTrackInfoOrMultiplePanes() {
@@ -66,7 +68,7 @@ class Window extends Component {
                             return <Pane
                                 key={pane.testId}
                                 testId={pane.testId}
-                                deletePane={() => this.deletePane(index)}
+                                deletePane={this.deletePane(index)}
                                 setHasTrackInfo={() => this.setState({ hasTrackInfo: true })}
                                 numPanes={this.state.panes.length}
                                 index={index}
@@ -77,7 +79,7 @@ class Window extends Component {
                     {
                         this.state.panes.length < 4 &&
                         <div className="AddComparison">
-                            <button className="Button" onClick={() => this.addPane()}>Add Comparison</button>
+                            <button className="Button" onClick={this.addPane}>Add Comparison</button>
                         </div>
                     }
                 </div>

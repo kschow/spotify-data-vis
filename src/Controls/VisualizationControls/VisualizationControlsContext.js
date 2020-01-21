@@ -14,8 +14,8 @@ const withVisualizationControls = (WrappedComponent) => {
                 }
             };
 
-            this.setChartType.bind(this);
-            this.setVisualizationFeatures.bind(this);
+            this.setChartType = this.setChartType.bind(this);
+            this.setVisualizationFeatures = this.setVisualizationFeatures.bind(this);
         }
 
         setChartType(chartType) {
@@ -31,8 +31,8 @@ const withVisualizationControls = (WrappedComponent) => {
                 <WrappedComponent visualizationControls={{
                     chartType: this.state.chartType,
                     visualizationFeatures: this.state.visualizationFeatures,
-                    setChartType: (chartType) => this.setChartType(chartType),
-                    setVisualizationFeatures: (features) => this.setVisualizationFeatures(features)
+                    setChartType: this.setChartType,
+                    setVisualizationFeatures: this.setVisualizationFeatures
                 }} {...this.props} />
             );
         }

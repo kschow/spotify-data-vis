@@ -13,8 +13,7 @@ const withTrackInfo = (WrappedComponent) => {
                 isLoading: false
             };
 
-            this.getTracksForX.bind(this);
-            this.getTracks.bind(this);
+            this.getTracks = this.getTracks.bind(this);
         }
 
         getTracksForX(tracksFunction, spotifyId) {
@@ -44,7 +43,7 @@ const withTrackInfo = (WrappedComponent) => {
                     tracks: this.state.tracks,
                     errorMessage: this.state.errorMessage,
                     isLoading: this.state.isLoading,
-                    getTracks: (spotifyId, searchType) => this.getTracks(spotifyId, searchType)
+                    getTracks: this.getTracks
                 }} {...this.props} />
             );
         }

@@ -10,9 +10,9 @@ class SearchControls extends Component {
             searchText: ''
         };
 
-        this.handleSearchTextChange.bind(this);
-        this.handleSearchTypeChange.bind(this);
-        this.onSubmit.bind(this);
+        this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
+        this.handleSearchTypeChange = this.handleSearchTypeChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     handleSearchTextChange(event) {
@@ -34,16 +34,16 @@ class SearchControls extends Component {
 
         return (
             <div className="SearchControls ControlBox">
-                <form onSubmit={(event) => this.onSubmit(event)}>
+                <form onSubmit={this.onSubmit}>
                     <input
                         type="text"
                         placeholder={`Search by ${searchType}`}
                         value={this.state.searchText}
-                        onChange={(event) => this.handleSearchTextChange(event)} />
+                        onChange={this.handleSearchTextChange} />
                     <select
                         name="searchType"
                         value={searchType}
-                        onChange={(event) => this.handleSearchTypeChange(event)} >
+                        onChange={this.handleSearchTypeChange} >
                         <option value="artist">Artist</option>
                         <option value="playlist">Playlist</option>
                     </select>

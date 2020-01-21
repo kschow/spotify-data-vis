@@ -15,10 +15,16 @@ const withSearch = (WrappedComponent) => {
                 isSearchBox: true
             };
 
-            this.searchForX.bind(this);
-            this.search.bind(this);
-            this.goToSearch.bind(this);
-            this.goToResults.bind(this);
+            this.setSearchType = this.setSearchType.bind(this);
+            this.search = this.search.bind(this);
+            this.goToSearch = this.goToSearch.bind(this);
+            this.goToResults = this.goToResults.bind(this);
+        }
+
+        setSearchType(searchType) {
+            this.setState({
+                searchType
+            });
         }
 
         searchForX(searchFunction, searchTerm) {
@@ -66,10 +72,10 @@ const withSearch = (WrappedComponent) => {
                     errorMessage: this.state.errorMessage,
                     isLoading: this.state.isLoading,
                     isSearchBox: this.state.isSearchBox,
-                    setSearchType: (searchType) => this.setState({ searchType }),
-                    search: (searchTerm) => this.search(searchTerm),
-                    goToSearch: () => this.goToSearch(),
-                    goToResults: () => this.goToResults()
+                    setSearchType: this.setSearchType,
+                    search: this.search,
+                    goToSearch: this.goToSearch,
+                    goToResults: this.goToResults
                 }} {...this.props} />
             );
         }
